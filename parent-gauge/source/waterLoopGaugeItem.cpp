@@ -181,7 +181,7 @@ qreal waterLoopGaugeItem::getCurrentValue(){
 }
 
 void waterLoopGaugeItem::setCurrentValue(qreal value){
-    currentValue = (startValue + (qreal) value / 99 * (maxValue-startValue));
+    currentValue = (startValue + (qreal) value / 99 * (maxValue-startValue));//taking values 0-99
     state = currentValue >= warningValueMed ? (currentValue>= warningValueHigh ? 2 : 1) : 0;
 
     if (mSpeedNeedle!=nullptr){
