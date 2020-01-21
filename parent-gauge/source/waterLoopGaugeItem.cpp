@@ -7,11 +7,12 @@ waterLoopGaugeItem::waterLoopGaugeItem()
 
 }
 
-waterLoopGaugeItem::waterLoopGaugeItem(QcThemeItem &theme, qreal size, QString type, QString label,QString units ,qreal precision, qreal maxValue, qreal warningValueHigh, qreal warningValueMed, qreal stepSize){
+waterLoopGaugeItem::waterLoopGaugeItem(QcThemeItem &theme, qreal size, QString type, QString label,QString units ,qreal precision, qreal startValue, qreal maxValue, qreal warningValueHigh, qreal warningValueMed, qreal stepSize){
     mainGauge = new QcGaugeWidget;
-    mainGauge->setMaximumSize(size,size);
+    //mainGauge->setMaximumSize(size,size);
     mainGauge->setMinimumSize(size,size);
     this->maxValue = maxValue;
+    this->startValue = startValue;
     this->stepSize = stepSize;
     this->warningValueMed = warningValueMed;
     this->warningValueHigh = warningValueHigh;
@@ -37,7 +38,7 @@ waterLoopGaugeItem::waterLoopGaugeItem(QcThemeItem &theme, qreal size, QString t
     if (theme.mainDegreesRadius>0){
         QcDegreesItem * majDeg = mainGauge->addDegrees(theme.mainDegreesRadius);
         majDeg->setStep(stepSize);
-        majDeg->setValueRange(0,maxValue);
+        majDeg->setValueRange(startValue,maxValue);
         majDeg->setColor(theme.mainColor);
         majDeg->setWidth(theme.mainDegreesWidth);
         majDeg->setLength(theme.mainDegreesLength);
@@ -46,7 +47,7 @@ waterLoopGaugeItem::waterLoopGaugeItem(QcThemeItem &theme, qreal size, QString t
     if (theme.subDegreesRadius>0){
         QcDegreesItem * deg = mainGauge->addDegrees(theme.subDegreesRadius);
         deg->setStep(stepSize/10.0);
-        deg->setValueRange(0,maxValue);
+        deg->setValueRange(startValue,maxValue);
         deg->setWidth(theme.subDegreesWidth);
         deg->setLength(theme.subDegreesLength);
         QColor subColor = theme.mainColor;
@@ -60,11 +61,11 @@ waterLoopGaugeItem::waterLoopGaugeItem(QcThemeItem &theme, qreal size, QString t
     QList<QPair<QColor,qreal>> lst;
 
     pair.first = QColor(theme.noWarningColor);
-    pair.second = 100* warningValueMed/maxValue;
+    pair.second = 100* (warningValueMed-startValue)/(maxValue-startValue);
     lst.append(pair);
 
     pair.first = QColor(theme.mediumWarningColor);
-    pair.second = 100 * warningValueHigh/maxValue;
+    pair.second = 100 * (warningValueHigh-startValue)/(maxValue-startValue);
     lst.append(pair);
 
     pair.first = QColor(theme.highWarningColor);
@@ -104,7 +105,8 @@ waterLoopGaugeItem::waterLoopGaugeItem(QcThemeItem &theme, qreal size, QString t
 
     if (theme.valuesRadius>0){
         lightUpValues = mainGauge->addValues(theme.valuesRadius);
-        lightUpValues->setValueRange(0,maxValue);
+        lightUpValues->setValueRange(startValue,maxValue);
+        lightUpValues->setCurrentValue(startValue);
         lightUpValues->setFont(theme.font);
         lightUpValues->setFontSize(theme.fontSizeValues);
         lightUpValues->setDynamic(true);
@@ -124,7 +126,8 @@ waterLoopGaugeItem::waterLoopGaugeItem(QcThemeItem &theme, qreal size, QString t
         else{
             mSpeedNeedle->setColor(Qt::transparent);
         }
-        mSpeedNeedle->setValueRange(0,maxValue);
+        mSpeedNeedle->setValueRange(startValue,maxValue);
+        mSpeedNeedle->setCurrentValue(startValue);
         mSpeedNeedle->setDegreeRange(theme.minDegree, theme.maxDegree);
         needleCover = mainGauge->addBackground(theme.needleCoverRadius);
         needleCover->clearrColors();
@@ -133,7 +136,7 @@ waterLoopGaugeItem::waterLoopGaugeItem(QcThemeItem &theme, qreal size, QString t
         needleCover->setWarningValue(warningValueHigh);
         needleCover->setDynamicColors(theme.backgroundColor, theme.warningColor);
         QcLabelItem *lab = mainGauge->addLabel(0);
-        lab->setText("0");
+        lab->setText(QString::number(startValue));
         lab->setFont(theme.font);
         lab->setFontSize(theme.fontSizeNeedleLabel);
         lab->setColor(theme.mainColor);
@@ -169,10 +172,20 @@ QcGaugeWidget * waterLoopGaugeItem::getGauge(){
     return this->mainGauge;
 }
 
+qint8 waterLoopGaugeItem::getState(){
+    return this->state;
+}
+
+qreal waterLoopGaugeItem::getCurrentValue(){
+    return this->currentValue;
+}
+
 void waterLoopGaugeItem::setCurrentValue(qreal value){
+    currentValue = (startValue + (qreal) value / 99 * (maxValue-startValue));//taking values 0-99
+    state = currentValue >= warningValueMed ? (currentValue>= warningValueHigh ? 2 : 1) : 0;
 
     if (mSpeedNeedle!=nullptr){
-        mSpeedNeedle->setCurrentValue(((qreal) value / 99 * maxValue)); //needs actual value
+        mSpeedNeedle->setCurrentValue(currentValue); //needs actual value
     }
     if (mDynamicColorBandDegrees!=nullptr){
         mDynamicColorBandDegrees->setCurrentValue( ((qreal) value / 99 *100));
@@ -181,13 +194,13 @@ void waterLoopGaugeItem::setCurrentValue(qreal value){
         mDynamicColorBand->setCurrentValue( ((qreal) value / 99 *100)); //needs percentages
     }
     if (mainBackground!= nullptr){
-        mainBackground->setCurrentValue(((qreal) value / 99 * maxValue));
+        mainBackground->setCurrentValue(currentValue);
     }
     if (needleCover!=nullptr){
-        needleCover->setCurrentValue(((qreal) value / 99 * maxValue));
+        needleCover->setCurrentValue(currentValue);
     }
     if (lightUpValues!=nullptr){
-        lightUpValues->setCurrentValue(((qreal) value / 99 * maxValue));
+        lightUpValues->setCurrentValue(currentValue);
     }
     if (positionIndicatior!=nullptr){
         positionIndicatior->setPercentage(((qreal) value / 99));

@@ -1,0 +1,40 @@
+//Comments can be written using two dashes
+//Each line must contain two words, a theme characteristic and a valid value
+//Start of theme
+font "Aero"
+mainColor #6FC3DF
+warningColor #921111
+noWarningColor #FF7D7D
+mediumWarningColor #14ff65
+highWarningColor #FF7D7D
+backgroundColor #000000
+valuesRadius 79
+fontSizeValues 0.075
+fontSizeLabel 0.09
+fontSizeNeedleLabel 0.12
+fontSizeUnits 0.055
+needleRadius 65
+needleCoverRadius 25
+outerRingRadius 99
+mainBackgroundRadius 97
+arcRadius 51
+arcWidth 0.025
+colorBandRadius 44
+colorBandWidth 0.1
+mainDegreesRadius 58
+subDegreesRadius 58
+mainDegreesWidth 0.05
+subDegreesWidth 0.01
+mainDegreesLength 0.1
+subDegreesLength 0.05
+needleVisible true
+minDegree -45
+maxDegree 225
+dropShadow true
+dropShadowRadius 30
+dropShadowColor #808080
+dropShadowAlpha 0.8
+dropShadowHorOffset 20 ;;negative values are to the left
+dropShadowVertOffset 2 ;;negative values are up
+labelLocation 65
+unitsLocation 25

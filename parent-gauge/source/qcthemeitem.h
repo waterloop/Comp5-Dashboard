@@ -16,6 +16,7 @@ class QcThemeItem
 public:
     QcThemeItem();
     QcThemeItem(QString directory, QString fileName);
+    QcThemeItem(QString filepath);
 
     QString font = "Arial";
     QColor mainColor = Qt::white;

@@ -1,0 +1,42 @@
+//Comments can be written using two dashes
+//Each line must contain two words, a theme characteristic and a valid value
+//Start of theme
+font "AvenirNext LT Pro Regular"
+mainColor #0a0447
+warningColor #FF7D7D
+noWarningColor #14ff65
+mediumWarningColor #FFE64D
+highWarningColor #FF7D7D
+backgroundColor #ffffff
+valuesRadius 60
+fontSizeValues 0.08
+fontSizeLabel 0.09
+fontSizeNeedleLabel 0.15
+fontSizeUnits 0.07
+needleRadius 65
+mainBackgroundRadius 97
+subDegreesRadius 86
+subDegreesWidth 0.01
+subDegreesLength 0.05
+subDegreesAlpha 0.2
+needleVisible false
+minDegree -90
+maxDegree 180
+dropShadow true
+dropShadowRadius 20
+dropShadowColor #808080
+dropShadowAlpha 0.8
+dropShadowHorOffset 2 ;;negative values are to the left
+dropShadowVertOffset 2 ;;negative values are up
+unitsLocation 25
+dynamicColorArcRadius 85
+dynamicColorsBegin
+| 0 #3bffb4 
+| 0.233 #3bffb4
+| 0.433 #8bef34
+| 0.566 #8bef34
+| 0.766 #f7f759
+| 0.8 #f7f759
+| 0.9 #fa4d4d
+dynamicColorsEnd
+dynamicColorArcWidth 0.1

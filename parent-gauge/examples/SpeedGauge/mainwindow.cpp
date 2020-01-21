@@ -28,20 +28,113 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QApplication>
+#include "../../source/mytcp.h"
 
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QWidget *parent, QString host, qint16 port) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    //SETTING UP ALL COMPONENTS
     ui->setupUi(this);
+    QcThemeItem mainTheme = QcThemeItem(":/styles/waterLoopThemeRETRO.txt");
+    QcThemeItem newTheme = QcThemeItem(":/styles/waterLoopThemeNEW.txt");
+    QcThemeItem midTheme = QcThemeItem(":/styles/waterLoopThemeMID.txt");
 
-    QcThemeItem mainTheme = QcThemeItem("D:/Coding/Workspaces/WaterLoop/qT/parent-gauge/Comp5-Dashboard/parent-gauge/source","waterLoopThemeRETRO.txt");
-    QcThemeItem newTheme = QcThemeItem("D:/Coding/Workspaces/WaterLoop/qT/parent-gauge/Comp5-Dashboard/parent-gauge/source","waterLoopThemeNEW.txt");
-    speedoMeter = new waterLoopGaugeItem(mainTheme, 250,"Speedometer","SPEED","Km/h",1, 400,300,200,50);
-    voltMeter = new waterLoopGaugeItem(newTheme, 250, "Voltmeter", "", "V",2 ,1, 0.5, 0.25, 0.1);
-    ui->verticalLayout->addWidget(speedoMeter->getGauge());
-    ui->verticalLayout->addWidget(voltMeter->getGauge());
+    //speedoMeter = new waterLoopGaugeItem(mainTheme, 250,"Speedometer","SPEED","Km/h",1, 400,300,200,50);
+    baroMeter = new waterLoopGaugeItem(newTheme, 250, "Current", "LV CURR." ,"A", 1, 0, 60, 50, 0, 5);
+
+    //ADDING COMPONENTS
+
+    //voltMeter = new waterLoopGaugeItem(newTheme, 250, "Voltmeter", "", "V",2 ,1, 0.5, 0.25, 0.1);
+    //ui->verticalLayout->addWidget(speedoMeter->getGauge());
+    ui->verticalLayout->addWidget(baroMeter->getGauge());
+
+
+    //SETTING UP CONNECTION
+    tcpsocket = new QTcpSocket(this);
+    //connect( tcpsocket, SIGNAL( readyRead()), this, SLOT(readTCPData()));
+    //connect( tcpsocket, SIGNAL( disconnected() ), this , SLOT(disconnectTCP()));
+    tcpsocket->connectToHost(host, port);
+    tcpaddress = host;
+
+    //STARTING CONNECTION AND ENTERING RUNNING LOOP
+
+    if (tcpsocket->waitForConnected(2000)) {
+        qDebug() << "Connected to Host";
+        while (true){ //running loop
+            if (tcpsocket->waitForReadyRead(3000)){
+                bytesRead = tcpsocket->bytesAvailable();
+                buffer = tcpsocket->readAll();
+                while (bytesRead>0){
+                    if (bytesLeft > 0 && bytesRead < bytesLeft){
+                        stream.append(buffer);
+                        bytesLeft-=bytesRead;
+                        bytesRead = 0;
+                        buffer.clear();
+                    }
+                    else if (bytesLeft > 0 && bytesRead > bytesLeft){
+                        stream.append(buffer.left(bytesLeft));
+                        data = QJsonDocument::fromJson(stream);
+                        updateApp(data);
+                        //possibly save data to a file should be ez pz
+                        stream.clear();
+                        bytesLeft=0;
+                        bytesRead-=bytesLeft;
+                    }
+                    if (bytesRead < packet_size){
+                        bytesLeft = packet_size - bytesRead;
+                        bytesRead=0;
+                        stream.append(buffer);
+                    }
+                    else{
+                        stream.append(buffer.left(packet_size));
+                        data = QJsonDocument::fromJson(stream);
+                        updateApp(data);
+                        //possibly save data to a file should be ez pz
+                        stream.clear();
+                        bytesLeft = 0;
+                        bytesRead-= packet_size;
+                    }
+                }
+            }
+            else {
+                qDebug() << "Heartbeat not recieved";
+                tcpsocket->write("Close"); //ideally have a generator to generate JSON
+                //depending on the messages we want to send (something like
+                // generateMessage(1, other params)
+                tcpsocket->close();
+            }
+        }
+
+    }
+    else{
+        qDebug() << "An error has occured, unable to connect";
+    }
+
+}
+
+void MainWindow::readTCPData() {
+    //bytesRead = tcpsocket->read(buffer, buffer_size);
+    for (int i = 0; i < bytesRead; i++){
+
+    }
+    if (!stream.isNull()){
+        qDebug()<< stream;
+    }
+    data = QJsonDocument::fromJson(stream);
+
+
+}
+
+void MainWindow::sendCommand(){
+    QByteArray command;
+    command.resize(10);
+    command = "test";
+    tcpsocket->write(command);
+    qDebug() << "Message to Client: " << command;
+
 }
 
 MainWindow::~MainWindow()
@@ -49,8 +142,20 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::updateApp(QJsonDocument &d){
+    QJsonObject obj = d.object();
+    //do bullshit here
+    baroMeter->setCurrentValue(90);
+}
+
+void MainWindow::readUpdate(QJsonDocument &d){
+
+    qDebug() << d.toJson();
+}
+
 void MainWindow::on_horizontalSlider_valueChanged(int value)
 {
-    speedoMeter->setCurrentValue(value);
-    voltMeter->setCurrentValue(value);
+    //speedoMeter->setCurrentValue(value);
+    //voltMeter->setCurrentValue(value);
+    baroMeter->setCurrentValue(value);
 }

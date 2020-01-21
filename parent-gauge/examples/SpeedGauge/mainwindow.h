@@ -33,7 +33,23 @@
 #include "../../source/qcgaugewidget.h"
 #include "../../source/qcthemeitem.h"
 #include "../../source/waterLoopGaugeItem.h"
+#include "../../source/mytcp.h"
 #include <QDebug>
+#include <QObject>
+#include <QHostAddress>
+#include <QTcpSocket>
+#include <QTcpServer>
+#include <QDebug>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <iostream>
+#include <QTextStream>
+#include <QIODevice>
+
+#define read_length 0
+#define read_buffer 1
+#define buffer_size 2048
+#define packet_size 1024
 
 namespace Ui {
 class MainWindow;
@@ -44,17 +60,31 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = 0, QString host= "127.0.0.1",qint16 port=42002);
     ~MainWindow();
+    void sendCommand();
+
 
 private slots:
+    void readUpdate(QJsonDocument &d);
     void on_horizontalSlider_valueChanged(int value);
+    void readTCPData();
 
 private:
+    void updateApp(QJsonDocument &d);
+
     Ui::MainWindow *ui;
     waterLoopGaugeItem * speedoMeter;
     waterLoopGaugeItem * voltMeter;
+    waterLoopGaugeItem * baroMeter;
     int maxSpeed;
+    QHostAddress tcpaddress;
+    QTcpSocket *tcpsocket;
+    QByteArray stream;
+    QByteArray buffer;;
+    qint64 bytesLeft=0;
+    qint64 bytesRead;
+    QJsonDocument data;
 
 
 

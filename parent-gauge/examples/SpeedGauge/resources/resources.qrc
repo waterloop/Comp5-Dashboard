@@ -1,10 +1,14 @@
 <RCC>
-    <qresource prefix="/fonts">
+    <qresource prefix="/fonts"/>
+    <qresource prefix="/">
+        <file>styles/waterLoopThemeNEW.txt</file>
+        <file>styles/waterLoopThemeRETRO.txt</file>
         <file>fonts/62DRAGZ.otf</file>
         <file>fonts/Aero.ttf</file>
         <file>fonts/Dream MMA.ttf</file>
         <file>fonts/PLANK___.TTF</file>
         <file>fonts/Potra.ttf</file>
         <file>fonts/Quantum.otf</file>
+        <file>styles/waterLoopThemeMID.txt</file>
     </qresource>
 </RCC>
