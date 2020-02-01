@@ -1,0 +1,41 @@
+{
+	{
+		name: "sensors",
+		sensorCount: 3,
+		sensors: [
+			{
+				name: "High Voltage (V)",
+				okayToRunRange: [240,260],
+				triggerBrakingRange: [200, 260],
+				gauge: True,
+				gaugeLabel: "HI. VOLT.",
+				unit: "V",
+				stepSize: 5,
+				prescision: 1
+			},
+			{
+				name: "Low Voltage (V)",
+				okayToRunRange: [24,28],
+				triggerBrakingRange: [20, 28],
+				gauge: True,
+				gaugeLabel: "LO. VOLT.",
+				unit: "V",
+				stepSize: 1,
+				prescision: 1
+			},
+			{
+				name: "Current (A)",
+				okayToRunRange: [0],
+				triggerBrakingRange: [0, 50],
+				gauge: True,
+				gaugeLabel: "CURRRENT",
+				unit: "A",
+				stepSize: 5,
+				prescision: 1
+			}
+		]
+	}
+}
+
+
+
