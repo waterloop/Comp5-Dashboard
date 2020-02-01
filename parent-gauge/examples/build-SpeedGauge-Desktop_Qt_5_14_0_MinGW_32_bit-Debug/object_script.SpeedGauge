@@ -1,0 +1,10 @@
+main.o
+mytcp.o
+qcthemeitem.o
+waterLoopGaugeItem.o
+mainwindow.o
+qcgaugewidget.o
+qrc_resources.o
+moc_mainwindow.o
+moc_mytcp.o
+moc_qcgaugewidget.o

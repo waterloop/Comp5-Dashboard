@@ -10,5 +10,8 @@
         <file>fonts/Potra.ttf</file>
         <file>fonts/Quantum.otf</file>
         <file>styles/waterLoopThemeMID.txt</file>
+        <file>config/waterloop_desktop_config.json</file>
+        <file>config/tester.json</file>
+        <file>config/iamgay.json</file>
     </qresource>
 </RCC>

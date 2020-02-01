@@ -30,6 +30,8 @@
 #include "ui_mainwindow.h"
 #include <QApplication>
 #include "../../source/mytcp.h"
+#include <QJsonDocument>
+#include <QFile>
 
 
 MainWindow::MainWindow(QWidget *parent, QString host, qint16 port) :
@@ -51,6 +53,16 @@ MainWindow::MainWindow(QWidget *parent, QString host, qint16 port) :
     //ui->verticalLayout->addWidget(speedoMeter->getGauge());
     ui->verticalLayout->addWidget(baroMeter->getGauge());
 
+
+    /////////GARICK THIS IS FOR YOU BABY
+
+
+    loadConfigW(":/config/waterloop_desktop_config.json");
+
+
+
+
+    //////////////////DON'T TOUCH UNDER HERE
 
     //SETTING UP CONNECTION
     tcpsocket = new QTcpSocket(this);
@@ -159,3 +171,33 @@ void MainWindow::on_horizontalSlider_valueChanged(int value)
     //voltMeter->setCurrentValue(value);
     baroMeter->setCurrentValue(value);
 }
+
+void MainWindow::loadConfigW(QString filePath) {
+    QString val;
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "ERROR: file not found" ;
+        return;
+    }
+    else {
+        val = file.readAll();
+
+        QJsonDocument doc = QJsonDocument::fromJson(val.toUtf8());
+        qDebug() << doc;
+        QJsonObject obj = doc.object();
+        QJsonValue num_of_sensors = obj.value(QString("sensorCount"));
+        qDebug() << num_of_sensors ;
+
+
+
+        //QJsonObject app = num_of_sensors.toObject();
+        //qDebug() << obj;
+        //qDebug() << app["description"].toString();
+
+
+    }
+
+}
+
+
+

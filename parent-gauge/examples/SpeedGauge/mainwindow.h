@@ -73,6 +73,9 @@ private slots:
 private:
     void updateApp(QJsonDocument &d);
 
+    void loadConfigW(QString filePath);
+
+
     Ui::MainWindow *ui;
     waterLoopGaugeItem * speedoMeter;
     waterLoopGaugeItem * voltMeter;
@@ -85,7 +88,7 @@ private:
     qint64 bytesLeft=0;
     qint64 bytesRead;
     QJsonDocument data;
-
+    QVector<waterLoopGaugeItem> sensors;
 
 
 };
