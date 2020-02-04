@@ -10,5 +10,11 @@
         <file>fonts/Potra.ttf</file>
         <file>fonts/Quantum.otf</file>
         <file>styles/waterLoopThemeMID.txt</file>
+        <file>styles/waterLoopThemeDARK.txt</file>
+        <file>images/wloop_icon_yellow.png</file>
+        <file>images/wloop_icon_yellow_small.png</file>
+        <file>images/wloop_icon_yellow_icon.png</file>
+        <file>styles/waterLoopThemeLOAD.txt</file>
+        <file>images/wloop_icon_yellow_mid.png</file>
     </qresource>
 </RCC>

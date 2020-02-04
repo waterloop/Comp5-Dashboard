@@ -1,0 +1,44 @@
+//Comments can be written using two dashes
+//Each line must contain two words, a theme characteristic and a valid value
+//Start of theme
+font "Proxima Nova Rg"
+mainColor #FED138
+backgroundColor #2B2B2B
+warningColor #870036
+noWarningColor #FED138
+highWarningColor #ff9494
+//valuesRadius 60
+dynamicValues false
+fontSizeValues 0.08
+fontSizeLabel 0.08
+fontSizeNeedleLabel 0.15
+fontSizeUnits 0.07
+labelLocation 30
+labelAngle -90
+labelFont "Proxima Nova Alt Rg"
+//needleRadius 40
+//mainBackgroundRadius 97
+subDegreesRadius 86
+subDegreesWidth 0.01
+subDegreesLength 0.05
+subDegreesAlpha 0
+needleVisible false
+minDegree -90
+maxDegree 270
+dropShadow false
+dropShadowRadius 20
+dropShadowColor #444444
+dropShadowAlpha 0.4
+dropShadowHorOffset 2 ;;negative values are to the left
+dropShadowVertOffset 2 ;;negative values are up
+//unitsLocation 25
+dynamicColorArcRadius 85
+dynamicColorArcCust false
+dynamicColorsBegin
+| 0 #921111
+| 0.2 #921111
+| 0.25 #FED138
+| 0.85 #FED138
+| 0.9 #921111
+dynamicColorsEnd
+dynamicColorArcWidth 0.03

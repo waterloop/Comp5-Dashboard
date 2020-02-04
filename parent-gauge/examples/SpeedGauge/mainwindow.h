@@ -34,6 +34,7 @@
 #include "../../source/qcthemeitem.h"
 #include "../../source/waterLoopGaugeItem.h"
 #include "../../source/mytcp.h"
+#include "../../source/wlooptcp.h"
 #include <QDebug>
 #include <QObject>
 #include <QHostAddress>
@@ -45,6 +46,8 @@
 #include <iostream>
 #include <QTextStream>
 #include <QIODevice>
+#include <QPixmap>
+#include <QLabel>
 
 #define read_length 0
 #define read_buffer 1
@@ -81,10 +84,12 @@ private:
     QHostAddress tcpaddress;
     QTcpSocket *tcpsocket;
     QByteArray stream;
-    QByteArray buffer;;
+    QByteArray buffer;
     qint64 bytesLeft=0;
     qint64 bytesRead;
     QJsonDocument data;
+
+
 
 
 

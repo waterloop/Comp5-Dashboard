@@ -15,22 +15,25 @@ class QcThemeItem
 {
 public:
     QcThemeItem();
-    QcThemeItem(QString directory, QString fileName);
     QcThemeItem(QString filepath);
 
     QString font = "Arial";
     QColor mainColor = Qt::white;
-    QColor mediumWarningColor =Qt::yellow;
     QColor noWarningColor = Qt::green ;
     QColor highWarningColor = Qt::red;
     QColor warningColor = Qt::gray;
     QColor backgroundColor = Qt::black ;
     qreal fontSizeValues;
     qreal valuesRadius = -1;
+    bool dynamicValues = true;
     qreal fontSizeLabel;
+    qreal labelAngle = 270;
+    QString labelFont = "";
     qreal fontSizeNeedleLabel;
     qreal fontSizeUnits;
     qreal needleRadius = - 1;
+    qreal needleLabelPosition =0;
+    qreal needleLabelAngle =90;
     qreal needleCoverRadius = -1;
     qreal outerRingRadius = -1;
     qreal mainBackgroundRadius =-1;
@@ -38,6 +41,7 @@ public:
     qreal arcWidth;
     qreal colorBandRadius =-1;
     qreal colorBandWidth;
+    bool colorBandDynamic = true;
     qreal mainDegreesRadius = -1;
     qreal subDegreesRadius =-1;
     qreal mainDegreesWidth;
@@ -57,6 +61,7 @@ public:
     qreal labelLocation = -1;
     qreal unitsLocation = -1;
     qreal dynamicColorArcRadius = -1;
+    bool dynamicColorArcCust = false;
     QList<QPair<qreal,QColor>> dynamicColorArc;
     qreal dynamicColorArcWidth = 0.1;
 

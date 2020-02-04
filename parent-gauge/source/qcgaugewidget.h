@@ -34,6 +34,9 @@
 #include <QObject>
 #include <QRectF>
 #include <QtMath>
+#include <QImage>
+#include <QPixmap>
+#include <QGraphicsDropShadowEffect>
 
 #if defined(QCGAUGE_COMPILE_LIBRARY)
 #  define QCGAUGE_DECL  Q_DECL_EXPORT
@@ -50,6 +53,7 @@ class QcDegreesItem;
 class QcValuesItem;
 class QcArcItem;
 class QcColorBand;
+class QcImage;
 class QcDynamicArcItem;
 class QcNeedleItem;
 class QcLabelItem;
@@ -71,6 +75,7 @@ public:
     QcArcItem* addArc(qreal position);
     QcColorBand* addColorBand(qreal position);
     QcDynamicArcItem* addDynamicArc(qreal position);
+    QcImage* addImage(qreal position);
     QcNeedleItem* addNeedle(qreal position);
     QcLabelItem* addLabel(qreal position);
     QcGlassItem* addGlass(qreal position);
@@ -168,7 +173,7 @@ public:
     void clearrColors();
     void setDynamic(bool b);
     void setDynamicColors(const QColor &regColor, const QColor &warnColor);
-    void setWarningValue(qreal value);
+    void setWarningValues(qreal low, qreal high);
     void setCurrentValue(qreal value);
 
 
@@ -177,7 +182,8 @@ private:
     QList<QPair<qreal,QColor> > mColors;
     QLinearGradient mLinearGrad;
     bool mDynamic;
-    qreal mWarningValue;
+    qreal mWarningHigh;
+    qreal mWarningLow;
     qreal mCurrentValue;
     QColor mWarningColorFill;
     QColor mRegularColorFill;
@@ -247,6 +253,29 @@ signals:
 
 public slots:
 
+
+};
+
+///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+
+class QCGAUGE_DECL QcImage : public QcItem
+{
+    Q_OBJECT
+public:
+    explicit QcImage(QObject * parent = 0);
+    void draw(QPainter *);
+    void setImage(QString filename);
+    void setDim(qreal w, qreal h); //based on percentages!
+    void scale(qreal w);//keeps ratio the same changes to new width percentage
+    void setAngle(qreal angle);
+
+private:
+
+    QPixmap mImage;
+    qreal mAngle;
+    qreal mWidth, mHeight;
 
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
