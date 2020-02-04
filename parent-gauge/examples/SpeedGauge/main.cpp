@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_Use96Dpi);
     QApplication a(argc, argv);
-    MainWindow w(nullptr, "rpi.waterloop.ca",2003);
+    MainWindow w(nullptr, "10.0.0.177",23);
 
     w.show();
 

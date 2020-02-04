@@ -73,6 +73,13 @@ QcArcItem *QcGaugeWidget::addArc(qreal position)
     return item;
 }
 
+QcImage *QcGaugeWidget::addImage(qreal position){
+    QcImage * image = new QcImage(this);
+    image->setPosition(position);
+    mItems.append(image);
+    return image;
+}
+
 QcColorBand *QcGaugeWidget::addColorBand(qreal position)
 {
     QcColorBand * item = new QcColorBand(this);
@@ -346,7 +353,7 @@ void QcBackgroundItem::draw(QPainter* painter)
     painter->drawEllipse(adjustRect(position()));
     }
     else{
-        if (mCurrentValue>mWarningValue){
+        if (mCurrentValue>mWarningHigh || mCurrentValue < mWarningLow){
             painter->setBrush(mWarningColorFill);
 
 
@@ -376,8 +383,9 @@ void QcBackgroundItem::clearrColors()
 {
     mColors.clear();
 }
-void QcBackgroundItem::setWarningValue(qreal value){
-    mWarningValue=value;
+void QcBackgroundItem::setWarningValues(qreal low, qreal high){
+    mWarningLow=low;
+    mWarningHigh = high;
 }
 void QcBackgroundItem::setDynamic(bool b){
     mCurrentValue = 0;
@@ -454,11 +462,11 @@ void QcLabelItem::draw(QPainter *painter)
 
     QPointF txtCenter = getPoint(mAngle,tmpRect);
     QFontMetrics fMetrics = painter->fontMetrics();
-    QSize sz = fMetrics.size( Qt::TextSingleLine, mText );
+    QSize sz = fMetrics.size(Qt::TextDontClip, mText );
     QRectF txtRect(QPointF(0,0), sz );
     txtRect.moveCenter(txtCenter);
 
-    painter->drawText( txtRect, Qt::TextSingleLine,mText );
+    painter->drawText( txtRect, Qt::TextDontClip ,mText );
 
 }
 
@@ -688,6 +696,53 @@ void QcColorBand::setOpacity(qreal value){
     setDynamic(true);
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+
+QcImage::QcImage(QObject * parent) : QcItem(parent)
+{
+    setPosition(15);
+    mAngle = 270;
+    mWidth = 0;
+    mHeight = 0;
+}
+
+void QcImage::draw(QPainter* painter){
+    resetRect();
+    QRectF tmpRect = adjustRect(position());
+    qreal r = getRadius(rect());
+    QPointF txtCenter = getPoint(mAngle,tmpRect);
+    QPixmap disp = mImage.scaledToWidth(r*mWidth);
+    painter->setRenderHint(QPainter::SmoothPixmapTransform,true);
+
+
+
+    painter->drawPixmap(txtCenter.x()-mWidth/2-r*mWidth/2,txtCenter.y()-mHeight/2-disp.height()/2,disp);
+
+}
+
+void QcImage::setImage(QString filename){
+    mImage = QPixmap(filename);
+    update();
+
+}
+
+void QcImage::scale(qreal w){
+    mWidth = w/100;
+    update();
+
+}
+
+void QcImage::setDim(qreal w, qreal h){ //percentage based
+    mWidth = w/100;
+    mHeight = h/100;
+    update();
+}
+void QcImage::setAngle(qreal angle){
+    mAngle = angle;
+    update();
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -1085,7 +1140,7 @@ void QcValuesItem::draw(QPainter*painter)
     font.setPointSizeF(mFontSize*r);
 
     painter->setFont(font);
-    painter->setPen(mColor);
+    painter->setPen(mColorLit);
     if (not mDynamic){
     for(qreal val = mMinValue;val<=mMaxValue;val+=mStep){
         qreal deg = getDegFromValue(val);

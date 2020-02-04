@@ -16,6 +16,7 @@ SOURCES += main.cpp\
     ../../source/mytcp.cpp \
     ../../source/qcthemeitem.cpp \
     ../../source/waterLoopGaugeItem.cpp \
+    ../../source/wloopsensor.cpp \
         mainwindow.cpp \
     ../../source/qcgaugewidget.cpp
 
@@ -23,7 +24,8 @@ HEADERS  += mainwindow.h \
     ../../source/mytcp.h \
     ../../source/qcgaugewidget.h \
     ../../source/qcthemeitem.h \
-    ../../source/waterLoopGaugeItem.h
+    ../../source/waterLoopGaugeItem.h \
+    ../../source/wloopsensor.h
 
 FORMS    += mainwindow.ui
 
