@@ -40,7 +40,6 @@
 #include <QHostAddress>
 #include <QTcpSocket>
 #include <QTcpServer>
-#include <QDebug>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <iostream>
@@ -48,6 +47,14 @@
 #include <QIODevice>
 #include <QPixmap>
 #include <QLabel>
+#include <QThread>
+#include <QTimer>
+#include <QRandomGenerator>
+#include <QPropertyAnimation>
+#include <QGridLayout>
+#include <QStackedWidget>
+#include <QBitmap>
+#include <QVector>
 
 #define read_length 0
 #define read_buffer 1
@@ -71,23 +78,43 @@ public:
 private slots:
     void readUpdate(QJsonDocument &d);
     void on_horizontalSlider_valueChanged(int value);
+
+    void moveLoadingGauge();
+    void loadInitializer();
+    void fadeOutInitializer();
+    void loadConnectionScreen();
+    void attemptConnection();
+    void fadeOutConnectionScreen();
+    void initializeConnection();
+    void moveGauge();
+    void loadMainScreen();
+
     void readTCPData();
 
+
 private:
+    void fadeOut(QWidget * w, const char* mem, int msec = 500);
+    void fadeIn(QWidget *w, int msec = 500);
     void updateApp(QJsonDocument &d);
 
+
+    QTimer * timerLoad;
     Ui::MainWindow *ui;
     waterLoopGaugeItem * speedoMeter;
     waterLoopGaugeItem * voltMeter;
-    waterLoopGaugeItem * baroMeter;
+    waterLoopGaugeItem * loader;
     int maxSpeed;
-    QHostAddress tcpaddress;
+    QString tcpaddress;
+    unsigned int tcpport;
     QTcpSocket *tcpsocket;
     QByteArray stream;
     QByteArray buffer;
     qint64 bytesLeft=0;
     qint64 bytesRead;
     QJsonDocument data;
+    qreal loadpos = 0;
+    QVector< QVector<waterLoopGaugeItem*> > battery = QVector< QVector<waterLoopGaugeItem*> >(2,QVector<waterLoopGaugeItem*>(3));
+    QVector< QVector<waterLoopGaugeItem*> > dlim = QVector< QVector<waterLoopGaugeItem*> >(2,QVector<waterLoopGaugeItem*>(3));
 
 
 
