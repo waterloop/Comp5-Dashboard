@@ -3,7 +3,7 @@
 //Start of theme
 font "Proxima Nova Rg"
 mainColor #FED138
-backgroundColor #2B2B2B
+backgroundColor #2b2b2b
 warningColor #870036
 noWarningColor #FED138
 highWarningColor #ff9494
