@@ -28,6 +28,7 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "wloopsocket.h"
 #include <QApplication>
 
 
@@ -294,7 +295,7 @@ void MainWindow::attemptConnection(){
         return;
     }
 
-    tcpsocket = new QTcpSocket(this);
+    tcpsocket = new WLoopSocket(this);
     tcpsocket->connectToHost(tcpaddress, tcpport);
 
     connect(tcpsocket, SIGNAL(connected()), this ,SLOT(initializeConnection()));
@@ -354,5 +355,3 @@ void MainWindow::moveLoadingGauge(){
 
 
 }
-
-

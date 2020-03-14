@@ -115,11 +115,6 @@ private:
     qreal loadpos = 0;
     QVector< QVector<waterLoopGaugeItem*> > battery = QVector< QVector<waterLoopGaugeItem*> >(2,QVector<waterLoopGaugeItem*>(3));
     QVector< QVector<waterLoopGaugeItem*> > dlim = QVector< QVector<waterLoopGaugeItem*> >(2,QVector<waterLoopGaugeItem*>(3));
-
-
-
-
-
 };
 
 #endif // MAINWINDOW_H
