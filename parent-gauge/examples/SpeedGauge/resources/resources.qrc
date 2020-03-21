@@ -20,5 +20,6 @@
         <file>images/mask-small.png</file>
         <file>images/wloop_full_large.png</file>
         <file>images/wloop_full_med.png</file>
+        <file>images/wloop_full_small.png</file>
     </qresource>
 </RCC>

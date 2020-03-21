@@ -35,11 +35,9 @@
 #include "../../source/waterLoopGaugeItem.h"
 #include "../../source/mytcp.h"
 #include "../../source/wlooptcp.h"
+#include "../../source/wloopsocket.h"
 #include <QDebug>
 #include <QObject>
-#include <QHostAddress>
-#include <QTcpSocket>
-#include <QTcpServer>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <iostream>
@@ -47,19 +45,21 @@
 #include <QIODevice>
 #include <QPixmap>
 #include <QLabel>
-#include <QThread>
-#include <QTimer>
 #include <QRandomGenerator>
 #include <QPropertyAnimation>
 #include <QGridLayout>
 #include <QStackedWidget>
 #include <QBitmap>
 #include <QVector>
+#include <QTime>
 
 #define read_length 0
 #define read_buffer 1
 #define buffer_size 2048
 #define packet_size 1024
+#define std_add "1.0.0.1"
+#define std_port 0
+
 
 namespace Ui {
 class MainWindow;
@@ -70,14 +70,19 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0, QString host= "127.0.0.1",qint16 port=42002);
+    explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void sendCommand();
 
 
 private slots:
+    void closeWindow();
+
     void readUpdate(QJsonDocument &d);
     void on_horizontalSlider_valueChanged(int value);
+
+    void updatePodHealthGOOD();
+    void updatePodHealthBAD();
 
     void moveLoadingGauge();
     void loadInitializer();
@@ -88,7 +93,7 @@ private slots:
     void initializeConnection();
     void moveGauge();
     void loadMainScreen();
-
+    void updateTimeDisplay();
     void readTCPData();
 
 
@@ -98,23 +103,33 @@ private:
     void updateApp(QJsonDocument &d);
 
 
+    int travelDistance = 300;
     QTimer * timerLoad;
     Ui::MainWindow *ui;
     waterLoopGaugeItem * speedoMeter;
-    waterLoopGaugeItem * voltMeter;
+    waterLoopGaugeItem * dlim;
+    waterLoopGaugeItem * highV;
+    waterLoopGaugeItem * highC;
+    waterLoopGaugeItem * lowV;
+    waterLoopGaugeItem * lowC;
     waterLoopGaugeItem * loader;
     int maxSpeed;
     QString tcpaddress;
     unsigned int tcpport;
-    QTcpSocket *tcpsocket;
+
+
+    WLoopSocket * tcp;
+
+    QThread * timeThread;
+    QTimer * timeDisplay;
+
+
     QByteArray stream;
     QByteArray buffer;
     qint64 bytesLeft=0;
     qint64 bytesRead;
     QJsonDocument data;
     qreal loadpos = 0;
-    QVector< QVector<waterLoopGaugeItem*> > battery = QVector< QVector<waterLoopGaugeItem*> >(2,QVector<waterLoopGaugeItem*>(3));
-    QVector< QVector<waterLoopGaugeItem*> > dlim = QVector< QVector<waterLoopGaugeItem*> >(2,QVector<waterLoopGaugeItem*>(3));
 
 
 
