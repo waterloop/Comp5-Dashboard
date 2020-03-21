@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1281</width>
-    <height>774</height>
+    <width>1920</width>
+    <height>1080</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -40,7 +40,7 @@ background-color : #1b1b1b
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="sizePolicy">
-    <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
@@ -50,98 +50,219 @@ background-color : #1b1b1b
    </property>
    <property name="styleSheet">
     <string notr="true">background-color : #1b1b1b;
+
 </string>
    </property>
-   <layout class="QGridLayout" name="gridLayout_6">
-    <item row="0" column="0">
-     <widget class="QStackedWidget" name="stackedWidget">
-      <property name="font">
-       <font>
-        <family>Proxima Nova Alt Rg</family>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <property name="currentIndex">
-       <number>0</number>
-      </property>
-      <widget class="QWidget" name="page1">
-       <layout class="QGridLayout" name="load_page_layout">
-        <item row="0" column="0">
-         <widget class="QWidget" name="load_page" native="true">
-          <property name="styleSheet">
-           <string notr="true"/>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="sizeConstraint">
+     <enum>QLayout::SetMaximumSize</enum>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QWidget" name="main_window" native="true">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QWidget" name="titlebar" native="true">
+         <property name="styleSheet">
+          <string notr="true">background-color: #0b0b0b;</string>
+         </property>
+         <layout class="QHBoxLayout" name="title_bar_layout">
+          <property name="spacing">
+           <number>0</number>
           </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="page2">
-       <layout class="QGridLayout" name="gridLayout_2" rowstretch="0">
-        <property name="leftMargin">
-         <number>6</number>
-        </property>
-        <property name="spacing">
-         <number>4</number>
-        </property>
-        <item row="0" column="0">
-         <widget class="QWidget" name="initializer" native="true">
-          <layout class="QGridLayout" name="gridLayout_4" rowstretch="0,0,0">
-           <property name="verticalSpacing">
-            <number>70</number>
-           </property>
-           <item row="0" column="0" alignment="Qt::AlignBottom">
-            <widget class="QLabel" name="logo">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>4</verstretch>
-              </sizepolicy>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="icon">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="close_button">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Maximum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>80</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Proxima Nova Alt Rg</family>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton#close_button {
+color: #fed138;
+border : 2px solid #0b0b0b;
+
+
+}
+
+QPushButton#close_button:hover{
+
+background-color: #870036;
+border : 2px solid #870036;
+
+}
+
+QPushButton#close_button:pressed{
+
+background-color: #ff9494;
+border : 2px solid #ff9494;
+
+}</string>
+            </property>
+            <property name="text">
+             <string>X</string>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QStackedWidget" name="stackedWidget">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Proxima Nova Alt Rg</family>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+         <property name="currentIndex">
+          <number>2</number>
+         </property>
+         <widget class="QWidget" name="page1">
+          <layout class="QGridLayout" name="load_page_layout">
+           <item row="0" column="0">
+            <widget class="QWidget" name="load_page" native="true">
+             <property name="maximumSize">
+              <size>
+               <width>500</width>
+               <height>500</height>
+              </size>
              </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="pixmap">
-              <pixmap resource="resources/resources.qrc">:/images/wloop_full_med.png</pixmap>
-             </property>
-             <property name="scaledContents">
-              <bool>true</bool>
+             <property name="styleSheet">
+              <string notr="true"/>
              </property>
             </widget>
            </item>
-           <item row="2" column="0" alignment="Qt::AlignHCenter|Qt::AlignTop">
-            <widget class="QPushButton" name="initialize_button">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>4</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>350</width>
-               <height>100</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>350</width>
-               <height>100</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <family>Proxima Nova Rg</family>
-               <pointsize>20</pointsize>
-               <italic>true</italic>
-              </font>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">
+          </layout>
+         </widget>
+         <widget class="QWidget" name="page2">
+          <layout class="QGridLayout" name="gridLayout_2" rowstretch="0">
+           <property name="leftMargin">
+            <number>6</number>
+           </property>
+           <property name="spacing">
+            <number>4</number>
+           </property>
+           <item row="0" column="0">
+            <widget class="QWidget" name="initializer" native="true">
+             <layout class="QGridLayout" name="gridLayout_4" rowstretch="0,0,0">
+              <property name="verticalSpacing">
+               <number>70</number>
+              </property>
+              <item row="0" column="0" alignment="Qt::AlignBottom">
+               <widget class="QLabel" name="logo">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>4</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="pixmap">
+                 <pixmap resource="resources/resources.qrc">:/images/wloop_full_med.png</pixmap>
+                </property>
+                <property name="scaledContents">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0" alignment="Qt::AlignHCenter|Qt::AlignTop">
+               <widget class="QPushButton" name="initialize_button">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>4</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>350</width>
+                  <height>100</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>350</width>
+                  <height>100</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Proxima Nova Rg</family>
+                  <pointsize>20</pointsize>
+                  <italic>true</italic>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">
 
 
 QPushButton#initialize_button {
@@ -169,52 +290,52 @@ background-color : #151515;
 
 
 </string>
-             </property>
-             <property name="text">
-              <string>INITIATE</string>
-             </property>
-             <property name="flat">
-              <bool>false</bool>
-             </property>
+                </property>
+                <property name="text">
+                 <string>INITIATE</string>
+                </property>
+                <property name="flat">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </widget>
            </item>
           </layout>
          </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="page3">
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
-         <widget class="QWidget" name="central_placeholder" native="true">
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <item>
-            <widget class="QWidget" name="placeholder1" native="true"/>
-           </item>
-           <item alignment="Qt::AlignVCenter">
-            <widget class="QFrame" name="buttons">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>600</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>600</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>16</pointsize>
-              </font>
-             </property>
+         <widget class="QWidget" name="page3">
+          <layout class="QGridLayout" name="gridLayout">
+           <item row="0" column="0">
+            <widget class="QWidget" name="central_placeholder" native="true">
              <property name="styleSheet">
-              <string notr="true">
+              <string notr="true"/>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout">
+              <item>
+               <widget class="QWidget" name="placeholder1" native="true"/>
+              </item>
+              <item alignment="Qt::AlignVCenter">
+               <widget class="QFrame" name="buttons">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>600</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>600</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>16</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">
 
 QFrame#buttons {
    
@@ -229,30 +350,30 @@ width: 500px;
 QFrame#buttons QLineEdit{
 font-size: 16pt;
 }</string>
-             </property>
-             <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
-             </property>
-             <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
-             </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_2">
-              <item alignment="Qt::AlignVCenter">
-               <widget class="QWidget" name="connection" native="true">
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>500</height>
-                 </size>
                 </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>500</height>
-                 </size>
+                <property name="frameShape">
+                 <enum>QFrame::StyledPanel</enum>
                 </property>
-                <property name="styleSheet">
-                 <string notr="true">QLineEdit{
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_2">
+                 <item alignment="Qt::AlignVCenter">
+                  <widget class="QWidget" name="connection" native="true">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>500</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>500</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">QLineEdit{
 
 background-color: #fed138;
 font-family : &quot;Proxima Nova Rg&quot;;
@@ -265,126 +386,126 @@ min-width: 500px;
 
 
 }</string>
-                </property>
-                <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,0,0,0,0,0,0,0,0">
-                 <property name="leftMargin">
-                  <number>25</number>
-                 </property>
-                 <property name="rightMargin">
-                  <number>25</number>
-                 </property>
-                 <property name="verticalSpacing">
-                  <number>20</number>
-                 </property>
-                 <item row="1" column="0" rowspan="2" colspan="3" alignment="Qt::AlignVCenter">
-                  <widget class="QLabel" name="title">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
                    </property>
-                   <property name="font">
-                    <font>
-                     <family>Proxima Nova Alt Rg</family>
-                     <pointsize>20</pointsize>
-                    </font>
-                   </property>
-                   <property name="styleSheet">
-                    <string notr="true">color : #fed138</string>
-                   </property>
-                   <property name="text">
-                    <string>CONNECT TO POD</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignCenter</set>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="4" column="0">
-                  <spacer name="verticalSpacer_2">
-                   <property name="orientation">
-                    <enum>Qt::Vertical</enum>
-                   </property>
-                   <property name="sizeType">
-                    <enum>QSizePolicy::Fixed</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>20</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                 <item row="5" column="0" colspan="3" alignment="Qt::AlignHCenter">
-                  <widget class="QLineEdit" name="port">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="minimumSize">
-                    <size>
-                     <width>502</width>
-                     <height>75</height>
-                    </size>
-                   </property>
-                   <property name="maximumSize">
-                    <size>
-                     <width>16777215</width>
-                     <height>16777215</height>
-                    </size>
-                   </property>
-                   <property name="font">
-                    <font>
-                     <family>Proxima Nova Rg</family>
-                     <pointsize>14</pointsize>
-                    </font>
-                   </property>
-                   <property name="styleSheet">
-                    <string notr="true"/>
-                   </property>
-                   <property name="inputMask">
-                    <string/>
-                   </property>
-                   <property name="text">
-                    <string/>
-                   </property>
-                   <property name="frame">
-                    <bool>false</bool>
-                   </property>
-                   <property name="placeholderText">
-                    <string>PORT NUMBER</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="7" column="0" colspan="3" alignment="Qt::AlignHCenter|Qt::AlignBottom">
-                  <widget class="QPushButton" name="connect_button">
-                   <property name="minimumSize">
-                    <size>
-                     <width>300</width>
-                     <height>100</height>
-                    </size>
-                   </property>
-                   <property name="maximumSize">
-                    <size>
-                     <width>300</width>
-                     <height>100</height>
-                    </size>
-                   </property>
-                   <property name="font">
-                    <font>
-                     <family>Proxima Nova Rg</family>
-                     <pointsize>15</pointsize>
-                     <weight>75</weight>
-                     <italic>true</italic>
-                     <bold>true</bold>
-                    </font>
-                   </property>
-                   <property name="styleSheet">
-                    <string notr="true">QPushButton#connect_button {
+                   <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,0,0,0,0,0,0,0,0">
+                    <property name="leftMargin">
+                     <number>25</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>25</number>
+                    </property>
+                    <property name="verticalSpacing">
+                     <number>20</number>
+                    </property>
+                    <item row="1" column="0" rowspan="2" colspan="3" alignment="Qt::AlignVCenter">
+                     <widget class="QLabel" name="title">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Proxima Nova Alt Rg</family>
+                        <pointsize>20</pointsize>
+                       </font>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">color : #fed138</string>
+                      </property>
+                      <property name="text">
+                       <string>CONNECT TO POD</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="0">
+                     <spacer name="verticalSpacer_2">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                      <property name="sizeType">
+                       <enum>QSizePolicy::Fixed</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>20</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item row="5" column="0" colspan="3" alignment="Qt::AlignHCenter">
+                     <widget class="QLineEdit" name="port">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>502</width>
+                        <height>75</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Proxima Nova Rg</family>
+                        <pointsize>14</pointsize>
+                       </font>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true"/>
+                      </property>
+                      <property name="inputMask">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="frame">
+                       <bool>false</bool>
+                      </property>
+                      <property name="placeholderText">
+                       <string>PORT NUMBER</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="7" column="0" colspan="3" alignment="Qt::AlignHCenter|Qt::AlignBottom">
+                     <widget class="QPushButton" name="connect_button">
+                      <property name="minimumSize">
+                       <size>
+                        <width>300</width>
+                        <height>100</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>300</width>
+                        <height>100</height>
+                       </size>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Proxima Nova Rg</family>
+                        <pointsize>15</pointsize>
+                        <weight>75</weight>
+                        <italic>false</italic>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">QPushButton#connect_button {
     color : #fed138;
 
 background-color : #1b1b1b;
@@ -393,7 +514,7 @@ border : 3px solid #fed138;
 
 border-radius : 5px;
 
-font : 	bold italic 
+font : 	bold 
  }
 
 QPushButton#connect_button:hover {
@@ -411,90 +532,367 @@ background-color : #151515;
 
 
 </string>
-                   </property>
-                   <property name="text">
-                    <string>CONNECT</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="3" column="0" colspan="3" alignment="Qt::AlignHCenter">
-                  <widget class="QLineEdit" name="ip_adress">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="minimumSize">
-                    <size>
-                     <width>502</width>
-                     <height>75</height>
-                    </size>
-                   </property>
-                   <property name="maximumSize">
-                    <size>
-                     <width>16777215</width>
-                     <height>16777215</height>
-                    </size>
-                   </property>
-                   <property name="font">
-                    <font>
-                     <family>Proxima Nova Rg</family>
-                     <pointsize>14</pointsize>
-                     <weight>50</weight>
-                     <italic>false</italic>
-                     <bold>false</bold>
-                    </font>
-                   </property>
-                   <property name="styleSheet">
-                    <string notr="true"/>
-                   </property>
-                   <property name="text">
-                    <string/>
-                   </property>
-                   <property name="frame">
-                    <bool>false</bool>
-                   </property>
-                   <property name="placeholderText">
-                    <string>POD IP ADDRESS</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="6" column="0">
-                  <spacer name="verticalSpacer">
-                   <property name="orientation">
-                    <enum>Qt::Vertical</enum>
-                   </property>
-                   <property name="sizeType">
-                    <enum>QSizePolicy::Fixed</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>20</width>
-                     <height>30</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                 <item row="8" column="1">
-                  <widget class="QLabel" name="connection_status">
-                   <property name="font">
-                    <font>
-                     <family>Proxima Nova Rg</family>
-                     <pointsize>12</pointsize>
-                    </font>
-                   </property>
-                   <property name="styleSheet">
-                    <string notr="true">QLabel#connection_status{
+                      </property>
+                      <property name="text">
+                       <string>CONNECT</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="0" colspan="3" alignment="Qt::AlignHCenter">
+                     <widget class="QLineEdit" name="ip_adress">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>502</width>
+                        <height>75</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Proxima Nova Rg</family>
+                        <pointsize>14</pointsize>
+                        <weight>50</weight>
+                        <italic>false</italic>
+                        <bold>false</bold>
+                       </font>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true"/>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="frame">
+                       <bool>false</bool>
+                      </property>
+                      <property name="placeholderText">
+                       <string>POD IP ADDRESS</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="6" column="0">
+                     <spacer name="verticalSpacer">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                      <property name="sizeType">
+                       <enum>QSizePolicy::Fixed</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>20</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item row="8" column="1">
+                     <widget class="QLabel" name="connection_status">
+                      <property name="font">
+                       <font>
+                        <family>Proxima Nova Rg</family>
+                        <pointsize>12</pointsize>
+                       </font>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">QLabel#connection_status{
 color : #fed138;
 font-family : &quot;Proxima Nova Rg&quot;;
 font-size : 12pt;
 
 
 }</string>
+                      </property>
+                      <property name="text">
+                       <string>STATUS: WAITING FOR INPUT</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="placeholder2" native="true">
+                <property name="font">
+                 <font>
+                  <family>Proxima Nova Rg</family>
+                 </font>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="page4">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QWidget#page4  QWidget{
+
+background-color : #232323;
+
+}
+
+
+</string>
+          </property>
+          <layout class="QGridLayout" name="main_layout" rowstretch="8,1" columnstretch="1,5">
+           <property name="leftMargin">
+            <number>20</number>
+           </property>
+           <property name="topMargin">
+            <number>20</number>
+           </property>
+           <property name="rightMargin">
+            <number>20</number>
+           </property>
+           <property name="bottomMargin">
+            <number>20</number>
+           </property>
+           <property name="spacing">
+            <number>10</number>
+           </property>
+           <item row="1" column="0" colspan="2">
+            <widget class="QWidget" name="statusbar" native="true">
+             <property name="styleSheet">
+              <string notr="true">background-color : #232323
+</string>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="3,20,4">
+              <property name="spacing">
+               <number>15</number>
+              </property>
+              <item>
+               <widget class="QWidget" name="status" native="true">
+                <property name="styleSheet">
+                 <string notr="true">QWidget#status QLabel {
+
+color : #fed138;
+font-family : &quot;Bahnschrift SemiLight&quot;;
+
+}</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_5" stretch="2,2,3">
+                 <item>
+                  <widget class="QLabel" name="state_descriptor">
+                   <property name="font">
+                    <font>
+                     <family>Bahnschrift SemiLight</family>
+                     <pointsize>12</pointsize>
+                    </font>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">QLabel#state_descriptor {
+
+
+
+
+}</string>
                    </property>
                    <property name="text">
-                    <string>STATUS: WAITING FOR INPUT</string>
+                    <string>State:</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="status_value">
+                   <property name="font">
+                    <font>
+                     <family>Bahnschrift SemiLight</family>
+                     <pointsize>14</pointsize>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>ARMED</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="time_connection" native="true">
+                   <property name="styleSheet">
+                    <string notr="true">QWidget#time_connection QLabel{
+
+font-size : 10pt;
+
+
+}
+QWidget#time_connection{
+border-top : 2px solid #fed138;
+}</string>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_7" columnstretch="1,1,1,1">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item row="0" column="3">
+                     <widget class="QWidget" name="connection_display" native="true">
+                      <layout class="QHBoxLayout" name="horizontalLayout_6">
+                       <item>
+                        <widget class="QLabel" name="connection_descriptor">
+                         <property name="text">
+                          <string>Connection:</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="connection_value">
+                         <property name="text">
+                          <string>32ms</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item row="0" column="0">
+                     <widget class="QWidget" name="time_display" native="true">
+                      <property name="styleSheet">
+                       <string notr="true">QWidget#time_display{
+
+border-right : 1px solid #fed138;
+
+}</string>
+                      </property>
+                      <layout class="QHBoxLayout" name="horizontalLayout_7">
+                       <item>
+                        <widget class="QLabel" name="time_descriptor">
+                         <property name="text">
+                          <string>Time:</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="time_value">
+                         <property name="font">
+                          <font>
+                           <family>Bahnschrift SemiLight</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>12:34</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="progress_container" native="true">
+                <property name="styleSheet">
+                 <string notr="true">QWidget#progress_container QLabel{
+color : #fed138;
+font-size : 14pt;
+}</string>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_8" rowstretch="1,3" columnstretch="1,3">
+                 <property name="verticalSpacing">
+                  <number>0</number>
+                 </property>
+                 <item row="1" column="0" colspan="2">
+                  <widget class="QProgressBar" name="distance_travelled_bar">
+                   <property name="styleSheet">
+                    <string notr="true">QProgressBar {
+     border: 1px solid #0b0b0b;
+     border-radius: 6px;
+	height: 10px;
+	text-align: center;
+	color: #fed138;
+     background-color: #0b0b0b;
+
+ }
+
+QProgressBar::chunk {
+background-color : #fed138;
+border-radius : 5px;
+
+border: 2px solid #fed138;;
+
+ }</string>
+                   </property>
+                   <property name="maximum">
+                    <number>99</number>
+                   </property>
+                   <property name="value">
+                    <number>24</number>
+                   </property>
+                   <property name="textVisible">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="0" colspan="2">
+                  <widget class="QLabel" name="distance_travelled_value">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>15</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>25</height>
+                    </size>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <family>Bahnschrift SemiLight</family>
+                     <pointsize>14</pointsize>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>Distance Travelled: 0 m</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>
@@ -504,176 +902,669 @@ font-size : 12pt;
                 </layout>
                </widget>
               </item>
+              <item>
+               <widget class="QWidget" name="battery" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_4" stretch="3,4">
+                 <item>
+                  <widget class="QLabel" name="battery_charge">
+                   <property name="font">
+                    <font>
+                     <family>Bahnschrift SemiLight</family>
+                     <pointsize>12</pointsize>
+                    </font>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">QLabel#battery_charge{
+color : #fed138;
+font-size : 12pt;
+font-family : &quot;Bahnschrift SemiLight&quot;;
+
+}</string>
+                   </property>
+                   <property name="text">
+                    <string>Battery Charge</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="battery_array" native="true">
+                   <property name="styleSheet">
+                    <string notr="true">QWidget#battery_array QLabel{
+
+color : #fed138;
+font-family : &quot;Bahnschrift SemiLight&quot;;
+font-size : 10pt;
+
+}
+
+QWidget#battery_array {
+border-top: 2px solid #fed138;
+}</string>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_6">
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="lv_descriptor">
+                      <property name="text">
+                       <string>Primary:</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QLabel" name="lv_battery">
+                      <property name="text">
+                       <string>73%</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="hv_descriptor">
+                      <property name="text">
+                       <string>Secondary:</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QLabel" name="hv_battery">
+                      <property name="text">
+                       <string>87%</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2">
+                     <widget class="QLabel" name="label_3">
+                      <property name="text">
+                       <string>38°C</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="2">
+                     <widget class="QLabel" name="label_4">
+                      <property name="text">
+                       <string>42°C</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
              </layout>
             </widget>
            </item>
-           <item>
-            <widget class="QWidget" name="placeholder2" native="true"/>
+           <item row="0" column="0">
+            <widget class="QWidget" name="table" native="true">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>150</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="layoutDirection">
+              <enum>Qt::LeftToRight</enum>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_8">
+              <item>
+               <widget class="QSlider" name="horizontalSlider">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
            </item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="page4">
-       <property name="styleSheet">
-        <string notr="true">QWidget#page4  QWidget{
+           <item row="0" column="1">
+            <widget class="QWidget" name="dash" native="true">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>800</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="layoutDirection">
+              <enum>Qt::LeftToRight</enum>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QWidget#dash &gt; QWidget{
 
-background-color : #232323;
 
-}
+}</string>
+             </property>
+             <layout class="QGridLayout" name="gaugeslayout" rowstretch="20,1" columnstretch="10,9,10">
+              <property name="spacing">
+               <number>20</number>
+              </property>
+              <item row="1" column="0" colspan="3">
+               <widget class="QWidget" name="bottom_panel" native="true">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QWidget#bottom_panel QLabel{
+
+font-size : 12pt;
+color : #fed138;
+font-family: &quot;Bahnschrift SemiLight&quot;;
+
+}</string>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_9">
+                 <item row="0" column="1">
+                  <widget class="QLabel" name="label_6">
+                   <property name="text">
+                    <string>Roll: 0.3°</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="label_5">
+                   <property name="text">
+                    <string> Pitch: 0.8°</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="2">
+                  <widget class="QLabel" name="label_7">
+                   <property name="text">
+                    <string>Yaw: 1.2°</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QWidget" name="left_panel" native="true">
+                <property name="autoFillBackground">
+                 <bool>false</bool>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">
+
+QWidget#left_panel QWidget {
+
+	background-color : #232323;
+
+
+}</string>
+                </property>
+                <layout class="QGridLayout" name="dlimHV_layout" rowstretch="4,8,1,6">
+                 <property name="horizontalSpacing">
+                  <number>20</number>
+                 </property>
+                 <property name="verticalSpacing">
+                  <number>10</number>
+                 </property>
+                 <item row="1" column="0" colspan="2">
+                  <widget class="QWidget" name="dlim" native="true">
+                   <property name="layoutDirection">
+                    <enum>Qt::LeftToRight</enum>
+                   </property>
+                   <layout class="QVBoxLayout" name="dlim_layout" stretch="0">
+                    <property name="topMargin">
+                     <number>6</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="dlim_descriptor">
+                      <property name="font">
+                       <font>
+                        <family>Bahnschrift SemiLight</family>
+                        <pointsize>12</pointsize>
+                        <weight>50</weight>
+                        <bold>false</bold>
+                        <underline>false</underline>
+                       </font>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">color : #fed138</string>
+                      </property>
+                      <property name="text">
+                       <string>DLIM Frequency</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="QWidget" name="hv_current" native="true"/>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QWidget" name="hv_voltage" native="true"/>
+                 </item>
+                 <item row="2" column="0" colspan="2">
+                  <widget class="QLabel" name="highV_descriptor">
+                   <property name="font">
+                    <font>
+                     <family>Bahnschrift SemiLight</family>
+                     <pointsize>12</pointsize>
+                    </font>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">color: #fed138;</string>
+                   </property>
+                   <property name="text">
+                    <string>High Voltage Battery</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="0">
+                  <spacer name="verticalSpacer_3">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeType">
+                    <enum>QSizePolicy::Preferred</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QWidget" name="right_panel" native="true">
+                <layout class="QGridLayout" name="buttonsLV_layout" rowstretch="4,8,1,6">
+                 <item row="0" column="1">
+                  <spacer name="verticalSpacer_4">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>178</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="QWidget" name="widget_2" native="true"/>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QWidget" name="widget_3" native="true"/>
+                 </item>
+                 <item row="2" column="0" colspan="2">
+                  <widget class="QLabel" name="lowV_descriptor">
+                   <property name="font">
+                    <font>
+                     <family>Bahnschrift SemiLight</family>
+                     <pointsize>12</pointsize>
+                    </font>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">color: #fed138</string>
+                   </property>
+                   <property name="text">
+                    <string>Low Voltage Battery</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0" colspan="2">
+                  <widget class="QWidget" name="start_stop_buttons" native="true">
+                   <layout class="QGridLayout" name="gridLayout_5">
+                    <item row="0" column="0">
+                     <widget class="QPushButton" name="start_button">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>350</width>
+                        <height>85</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>350</width>
+                        <height>85</height>
+                       </size>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Bahnschrift SemiBold</family>
+                        <pointsize>20</pointsize>
+                       </font>
+                      </property>
+                      <property name="layoutDirection">
+                       <enum>Qt::LeftToRight</enum>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">QPushButton#start_button {
+color : #fed138;
+
+background-color : #2b2b2b;
+
+border : 2px solid #fed138;
+
+border-radius : 5px;
+
+ }
+
+QPushButton#start_button:hover {
+
+
+background-color : #202020;
+
+ }
+
+QPushButton#start_button:pressed {
+
+background-color : #151515;
+
+ }
 
 
 </string>
-       </property>
-       <layout class="QGridLayout" name="main_layout" rowstretch="20,1" columnstretch="4,20">
-        <property name="horizontalSpacing">
-         <number>10</number>
-        </property>
-        <property name="verticalSpacing">
-         <number>0</number>
-        </property>
-        <item row="0" column="1">
-         <widget class="QWidget" name="dash" native="true">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>800</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="layoutDirection">
-           <enum>Qt::LeftToRight</enum>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QWidget#dash &gt; QWidget{
+                      </property>
+                      <property name="text">
+                       <string>START</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QPushButton" name="stop_button">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>350</width>
+                        <height>85</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>350</width>
+                        <height>85</height>
+                       </size>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Bahnschrift SemiBold</family>
+                        <pointsize>18</pointsize>
+                       </font>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">QPushButton#stop_button {
+color : #2b2b2b;
 
-border-top: 3px solid #fed138;
+background-color : #fed138;
 
+border : 2px solid #0b0b0b;
+
+border-radius : 5px;
+
+ }
+
+QPushButton#stop_button:hover {
+
+
+background-color : #dba100;
+
+ }
+
+QPushButton#stop_button:pressed {
+
+background-color : #870036;
+
+ }
+
+
+</string>
+                      </property>
+                      <property name="text">
+                       <string>STOP</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QWidget" name="central_panel" native="true">
+                <layout class="QGridLayout" name="speed_layout">
+                 <item row="0" column="0">
+                  <widget class="QWidget" name="speedometer" native="true"/>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QWidget" name="status_area" native="true">
+                   <layout class="QVBoxLayout" name="verticalLayout_3">
+                    <item>
+                     <widget class="QWidget" name="connection_status_area" native="true">
+                      <layout class="QHBoxLayout" name="horizontalLayout_3">
+                       <property name="spacing">
+                        <number>10</number>
+                       </property>
+                       <item>
+                        <widget class="QLabel" name="label">
+                         <property name="font">
+                          <font>
+                           <family>Bahnschrift SemiLight</family>
+                           <pointsize>14</pointsize>
+                          </font>
+                         </property>
+                         <property name="styleSheet">
+                          <string notr="true">color: #fed138</string>
+                         </property>
+                         <property name="text">
+                          <string>Connection Status:</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="connection_indicator">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>150</width>
+                           <height>40</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>100</width>
+                           <height>30</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Bahnschrift SemiLight</family>
+                           <pointsize>12</pointsize>
+                          </font>
+                         </property>
+                         <property name="styleSheet">
+                          <string notr="true">QLabel#connection_indicator{
+background-color: #14ff65;
+color: #2b2b2b;
+border: 3px solid #14ff65;
+border-radius : 20px;
 
 }</string>
-          </property>
-          <layout class="QGridLayout" name="gaugeslayout">
-           <property name="spacing">
-            <number>20</number>
-           </property>
-           <item row="0" column="0">
-            <widget class="QWidget" name="battery" native="true">
-             <layout class="QGridLayout" name="battery_layout">
-              <item row="0" column="0">
-               <widget class="QWidget" name="widget" native="true"/>
+                         </property>
+                         <property name="text">
+                          <string>CONNECTED</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QWidget" name="pod_status_area" native="true">
+                      <layout class="QHBoxLayout" name="horizontalLayout_4">
+                       <property name="spacing">
+                        <number>10</number>
+                       </property>
+                       <item>
+                        <widget class="QLabel" name="label_2">
+                         <property name="font">
+                          <font>
+                           <family>Bahnschrift SemiLight</family>
+                           <pointsize>14</pointsize>
+                          </font>
+                         </property>
+                         <property name="styleSheet">
+                          <string notr="true">color: #fed138;</string>
+                         </property>
+                         <property name="text">
+                          <string>Pod Health:</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="pod_indicator">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>150</width>
+                           <height>40</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Bahnschrift SemiLight</family>
+                           <pointsize>12</pointsize>
+                          </font>
+                         </property>
+                         <property name="styleSheet">
+                          <string notr="true">QLabel#pod_indicator{
+background-color: #14ff65;
+color: #2b2b2b;
+border: 3px solid #14ff65;
+border-radius : 20px;
+
+}</string>
+                         </property>
+                         <property name="text">
+                          <string>GOOD</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
               </item>
              </layout>
             </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QWidget" name="dlim" native="true">
-             <layout class="QGridLayout" name="dlim_layout">
-              <item row="0" column="0">
-               <widget class="QWidget" name="widget_2" native="true"/>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item row="0" column="1" rowspan="2">
-            <widget class="QWidget" name="gaugewidget" native="true"/>
            </item>
           </layout>
          </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QWidget" name="table" native="true"/>
-        </item>
-        <item row="1" column="0" colspan="2">
-         <widget class="QWidget" name="statusbar" native="true">
-          <property name="styleSheet">
-           <string notr="true">background-color : #1b1b1b</string>
-          </property>
-          <widget class="QSlider" name="horizontalSlider">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>991</width>
-             <height>41</height>
-            </rect>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color : #ffffff</string>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </widget>
-        </item>
-       </layout>
-      </widget>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </item>
    </layout>
-  </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1281</width>
-     <height>33</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Proxima Nova Alt Rg</family>
-     <pointsize>14</pointsize>
-    </font>
-   </property>
-   <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QMenuBar {
-background-color: #1b1b1b;
-}
-
-QMenuBar::item {
-color : #FED138;
-
-}
-
-QMenuBar::item:hover{
-background-color : #2b2b2b
-}
-
-QMenuBar::item:pressed{
-background-color: #000000
-}</string>
-   </property>
-  </widget>
-  <widget class="QStatusBar" name="statusBar">
-   <property name="layoutDirection">
-    <enum>Qt::RightToLeft</enum>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QStatusBar{
-
-background-color : #1b1b1b;
-min-height : 75px;
-
-
-}</string>
-   </property>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

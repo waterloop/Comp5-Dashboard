@@ -25,7 +25,8 @@ HEADERS  += mainwindow.h \
     ../../source/qcgaugewidget.h \
     ../../source/qcthemeitem.h \
     ../../source/waterLoopGaugeItem.h \
-    ../../source/wloopsensor.h
+    ../../source/wloopsensor.h \
+    ../../source/wloopsocket.h
 
 FORMS    += mainwindow.ui
 

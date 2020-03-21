@@ -9,7 +9,7 @@ waterLoopGaugeItem::waterLoopGaugeItem()
 
 waterLoopGaugeItem::waterLoopGaugeItem(QcThemeItem &theme, qreal size,QString type, QString label,QString units ,qreal precision, qreal startValue, qreal maxValue, qreal warningValueHigh, qreal warningValueLow, qreal stepSize){
     mainGauge = new QcGaugeWidget;
-    mainGauge->setMaximumSize(size,size);
+    //mainGauge->setMaximumSize(size,size);
     mainGauge->setMinimumSize(size,size);
     this->maxValue = maxValue;
     this->startValue = startValue;
@@ -245,7 +245,19 @@ qreal waterLoopGaugeItem::getCurrentValue(){
 
 void waterLoopGaugeItem::setCurrentValue(qreal value){
     currentValue = (startValue + (qreal) value / 99 * (maxValue-startValue));//taking values 0-99
+    int oldstate = this->state;
     state = currentValue >= warningValueLow ? (currentValue>= warningValueHigh ? 2 : 1) : 0;
+
+    if (oldstate!=state){
+        emit stateChanged();
+        if( state == 2 || state == 0){
+            emit badState();
+        }
+        else if (state == 1){
+            emit safeState();
+        }
+    }
+
 
     if (mSpeedNeedle!=nullptr){
         mSpeedNeedle->setCurrentValue(currentValue); //needs actual value

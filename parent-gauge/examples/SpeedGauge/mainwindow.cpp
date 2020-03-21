@@ -33,26 +33,32 @@
 
 
 
-
-
-
-MainWindow::MainWindow(QWidget *parent, QString host, qint16 port) :
+MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
 
-
     //SETTING UP UI
     ui->setupUi(this);
+    //---------------------------------------------------------------------------
 
     //LOADING THEMES
     QcThemeItem darkTheme = QcThemeItem(":/styles/waterLoopThemeDARK.txt");
     QcThemeItem loadTheme = QcThemeItem(":/styles/waterLoopThemeLOAD.txt");
+    //----------------------------------------------------------------------------
 
+    //LOADING IMAGES
+
+    QPixmap logo(":/images/wloop_full_med.png");
+    ui->logo->setPixmap(logo);
+    ui->logo->setMask(logo.mask());
+    ui->logo->show();
+
+    QPixmap logo_small(":/images/wloop_full_small.png");
+    //-------------------------------------------------------------------------
 
     //SETTING UP LOADER
     loader = new waterLoopGaugeItem(loadTheme, 500, "Current", "LOADING" ,"A", 0, 0, 60, 60, 0, 5);
-
 
     QcImage * im =  loader->getGauge()->addImage(10);
     im->setAngle(90);
@@ -63,58 +69,150 @@ MainWindow::MainWindow(QWidget *parent, QString host, qint16 port) :
     connect(timerLoad, &QTimer::timeout, this, &MainWindow::moveLoadingGauge);
     timerLoad->start(10);
 
+     ui->load_page_layout->addWidget(loader->getGauge(),0,0);
+    //-------------------------------------------------------------------
 
+    //SETTING UP TIME DISPLAY
+     ui->time_value->setText(QTime::currentTime().toString("hh:mm"));
 
+     timeThread = new QThread(this);
 
-    //ADDING COMPONENTS
+     //setting up timer
+     timeDisplay = new QTimer(nullptr);
+     timeDisplay->setInterval(1000);
+     timeDisplay->moveToThread(timeThread);
 
-    speedoMeter = new waterLoopGaugeItem(darkTheme, 300,"Speedometer","SPEED","m/s",1,0, 400,350,50,50);
+     //required connections
+     connect(timeDisplay, SIGNAL(timeout()), this, SLOT(updateTimeDisplay()));
+     connect(timeThread, SIGNAL(started()), timeDisplay, SLOT(start()));
+     connect(timeThread, SIGNAL(finished()),timeDisplay, SLOT(stop()));
 
+     //starting thread
+     timeThread->start();
 
-    //voltMeter = new waterLoopGaugeItem(newTheme, 250, "Voltmeter", "", "V",2 ,1, 0.5, 0.25, 0.1);
-    //ui->verticalLayout->addWidget(speedoMeter->getGauge());
-    //ui->verticalLayout->addWidget(baroMeter->getGauge());
-    //ui->grid->addWidget(loader->getGauge(),0,0);
+    //------------------------------------------------------------------
 
+    //CREATING COMPONENTS
+
+    speedoMeter = new waterLoopGaugeItem(darkTheme, 150,"Speedometer","SPEED","m/s",1,0, 400,350,50,50);
+    dlim = new waterLoopGaugeItem(darkTheme, 150,"DLIM","FREQ.","Hz",1,60, 300,280,100,40);
+    highC = new waterLoopGaugeItem(darkTheme, 150,"HVCurrent","CURR.","A",1,0, 400,350,50,50);
+    highV = new waterLoopGaugeItem(darkTheme, 150,"HVVoltage","VOLT.","V",1,0, 400,350,50,50);
+    lowC = new waterLoopGaugeItem(darkTheme, 150,"LVCurrent","CURR.","A",1,0, 400,350,50,50);
+    lowV = new waterLoopGaugeItem(darkTheme, 150,"LVVoltage","VOLT.","V",1,0, 400,350,50,50);
+    //-----------------------------------------------------------------------------
+
+    //SETTING UP APPLICATION
     ui->stackedWidget->setCurrentIndex(0);
 
-    QPixmap logo(":/images/wloop_full_med.png");
-    ui->logo->setPixmap(logo);
-    ui->logo->setMask(logo.mask());
-    ui->logo->show();
+    //SETTING UP TITLE BAR
+    ui->main_window->layout()->setContentsMargins(0,0,0,0);
+    ui->centralWidget->layout()->setContentsMargins(0,0,0,0);
+    ui->title_bar_layout->layout()->setContentsMargins(0,0,0,0);
+    ui->icon->setPixmap(logo_small);
+
+    connect(ui->close_button,SIGNAL(released()), this, SLOT(closeWindow()));
+
+    //----------------------------------------------------------------------
+
+    //SETTING UP PROGRESS BAR
+
+    ui->distance_travelled_bar->setValue(0);
+
+    //----------------------------------------------------------------------
+
+    //DETERMINING THE INITIAL HEALTH
+
+    if(speedoMeter->getState() == 1 && dlim->getState() == 1 && lowC->getState()==1 && lowV->getState()==1 && highV->getState()==1 && highC->getState()==1){
+        ui->pod_indicator->setStyleSheet("QLabel#pod_indicator{ background-color: #14ff65; color: #2b2b2b; border: 3px solid #14ff65; border-radius : 20px; }");
+        ui->pod_indicator->setText("GOOD");
+    }
+    else{
+        ui->pod_indicator->setStyleSheet("QLabel#pod_indicator{ background-color: #ff9494; color: #2b2b2b; border: 3px solid #ff9494; border-radius : 20px; }");
+        ui->pod_indicator->setText("BAD");
+    }
+
+    //------------------------------------------------------------------------
+
+    //CONNECTING MAIN GAUGES TO POD HEALTH
+
+    connect(speedoMeter, SIGNAL(badState()), this, SLOT(updatePodHealthBAD()));
+    connect(speedoMeter, SIGNAL(safeState()), this, SLOT(updatePodHealthGOOD()));
+    connect(dlim, SIGNAL(badState()), this, SLOT(updatePodHealthBAD()));
+    connect(dlim, SIGNAL(safeState()), this, SLOT(updatePodHealthGOOD()));
+    connect(highC, SIGNAL(badState()), this, SLOT(updatePodHealthBAD()));
+    connect(highC, SIGNAL(safeState()), this, SLOT(updatePodHealthGOOD()));
+    connect(highV, SIGNAL(badState()), this, SLOT(updatePodHealthBAD()));
+    connect(highV, SIGNAL(safeState()), this, SLOT(updatePodHealthGOOD()));
+    connect(lowC, SIGNAL(badState()), this, SLOT(updatePodHealthBAD()));
+    connect(lowC, SIGNAL(safeState()), this, SLOT(updatePodHealthGOOD()));
+    connect(lowV, SIGNAL(badState()), this, SLOT(updatePodHealthBAD()));
+    connect(lowC, SIGNAL(safeState()), this, SLOT(updatePodHealthGOOD()));
+
+
+    //SETTING UP THE MAIN GAUGES DISPLAY
+    ui->dlim_layout->addWidget(dlim->getGauge(),0);
+    ui->dlim_layout->setStretch(0,1);
+    ui->dlim_layout->setStretch(1,6);
+    ui->dlimHV_layout->addWidget(highV->getGauge(),3,0);
+    ui->dlimHV_layout->addWidget(highC->getGauge(),3,1);
+    ui->buttonsLV_layout->addWidget(lowV->getGauge(),3,0);
+    ui->buttonsLV_layout->addWidget(lowC->getGauge(),3,1);
+    ui->speed_layout->addWidget(speedoMeter->getGauge(),0,0);
+
+    //SETTING TAB ORDER
+
+    setTabOrder(ui->ip_adress,ui->port);
+    setTabOrder(ui->port,ui->connect_button);
+
+    //TRYING INITIAL CONNECTION WITH DETERMINED ADRESS AND PORT
+
+    tcp = new WLoopSocket(this);
+    tcp->connectToHost(std_add, std_port);
+    if(tcp->waitForConnected(1000)){
+        qDebug() << "conected!";
+    }
+
+
+
+    //TESTING ONLY AFTER THIS POINT
+    //ui->horizontalSlider->setVisible(false);
 
 
 
 
-    ui->load_page_layout->addWidget(loader->getGauge(),0,0);
+
+
+
+
+    /*
     for (int i = 0; i < 2; i ++){
         for (int j = 0; j < 3; j++){
-            battery[i][j] = new waterLoopGaugeItem(darkTheme, 200,"Speedometer","SPEED","m/s",1,0, 400,350,50,50);
+            battery[i][j] = new waterLoopGaugeItem(darkTheme, 150,"Speedometer","SPEED","m/s",1,0, 400,350,50,50);
             ui->battery_layout->addWidget(battery[i][j]->getGauge(),i,j);
         }
     }
     for (int i = 0; i < 2; i ++){
         for (int j = 0; j < 3; j++){
-            dlim[i][j] = new waterLoopGaugeItem(darkTheme, 200,"Speedometer","HI VOLT.","m/s",1,0, 400,350,50,50);
+            dlim[i][j] = new waterLoopGaugeItem(darkTheme, 150,"Speedometer","HI VOLT.","m/s",1,0, 400,350,50,50);
             ui->dlim_layout->addWidget(dlim[i][j]->getGauge(),i,j);
         }
     }
-
+*/
     //ui->grid->addWidget(speedoMeter->getGauge(),0,1);
 
 
 
-    ui->horizontalSlider->setVisible(true);
+
 
     //SETTING UP CONNECTION
-    tcpsocket = new QTcpSocket(this);
+
     //connect( tcpsocket, SIGNAL( readyRead()), this, SLOT(readTCPData()));
     //connect( tcpsocket, SIGNAL( disconnected() ), this , SLOT(disconnectTCP()));
-    tcpsocket->connectToHost(host, port);
-    tcpaddress = host;
+
 
     //STARTING CONNECTION AND ENTERING RUNNING LOOP
-
+/*
     if (tcpsocket->waitForConnected(500)) {
         qDebug() << "Connected to Host";
         while (true){ //running loop
@@ -169,28 +267,32 @@ MainWindow::MainWindow(QWidget *parent, QString host, qint16 port) :
         qDebug() << "An error has occured, unable to connect";
     }
 
+    */
+
 }
 
 void MainWindow::readTCPData() {
-    //bytesRead = tcpsocket->read(buffer, buffer_size);
-    for (int i = 0; i < bytesRead; i++){
+    buffer = tcp->readAll();
 
-    }
-    if (!stream.isNull()){
-        qDebug()<< stream;
-    }
+    qDebug()<< buffer;
+
     data = QJsonDocument::fromJson(stream);
 
 
 }
 
+void MainWindow::closeWindow(){
+    tcp->closeThread();
+    timeThread->exit();
+    this->close();
+}
 
 
 void MainWindow::sendCommand(){
     QByteArray command;
     command.resize(10);
     command = "test";
-    tcpsocket->write(command);
+    tcp->write(command);
     qDebug() << "Message to Client: " << command;
 
 }
@@ -213,19 +315,35 @@ void MainWindow::readUpdate(QJsonDocument &d){
 
 void MainWindow::on_horizontalSlider_valueChanged(int value)
 {
+    dlim->setCurrentValue(value);
+    lowC->setCurrentValue(value);
+    lowV->setCurrentValue(value);
+    highC->setCurrentValue(value);
+    highV->setCurrentValue(value);
     speedoMeter->setCurrentValue(value);
-    //voltMeter->setCurrentValue(value);
 
-    for (int i = 0; i < 2; i ++){
-        for (int j = 0; j < 3; j++){
-            battery[i][j]->setCurrentValue(value);
-        }
+    ui->distance_travelled_bar->setValue(value);
+    QString dist;
+    dist = "Distance Travelled: ";
+    dist.append(QString::number(floor((static_cast<double>(value)/99)*travelDistance)));
+    dist.append(" m");
+    ui->distance_travelled_value->setText(dist);
+
+
+}
+
+void MainWindow::updatePodHealthGOOD(){
+
+    if(speedoMeter->getState() == 1 && dlim->getState() == 1 && lowC->getState()==1 && lowV->getState()==1 && highV->getState()==1 && highC->getState()==1){
+        ui->pod_indicator->setStyleSheet("QLabel#pod_indicator{ background-color: #14ff65; color: #2b2b2b; border: 3px solid #14ff65; border-radius : 20px; }");
+        ui->pod_indicator->setText("GOOD");
     }
-    for (int i = 0; i < 2; i ++){
-        for (int j = 0; j < 3; j++){
-            dlim[i][j]->setCurrentValue(value);
-        }
-    }
+
+}
+
+void MainWindow::updatePodHealthBAD(){
+    ui->pod_indicator->setStyleSheet("QLabel#pod_indicator{ background-color: #ff9494; color: #2b2b2b; border: 3px solid #ff9494; border-radius : 20px; }");
+    ui->pod_indicator->setText("BAD");
 
 }
 
@@ -256,11 +374,11 @@ void MainWindow::fadeOut(QWidget *w, const char* mem, int msec){
 
 void MainWindow::moveGauge(){
     if (loadpos<99){
-
         loadpos+= static_cast<qreal>(QRandomGenerator::global()->bounded(1,5))/10;
         speedoMeter->setCurrentValue(loadpos);
     }
 }
+
 void MainWindow::loadMainScreen(){
     ui->stackedWidget->setCurrentIndex(3);
 
@@ -271,6 +389,8 @@ void MainWindow::initializeConnection(){
     ui->connection_status->setText("STATUS: CONNECTED\n INITIALIZING CONNECTION");
 
     //SEND FIRST ACKNOWLEDGMENT PACKAGE AND STUFF
+
+    connect(tcp,SIGNAL(readyRead()),this, SLOT(readTCPData()));
 
 
     //MOVE ONTO THE MAIN STUFF
@@ -289,15 +409,14 @@ void MainWindow::attemptConnection(){
     tcpaddress = ui->ip_adress->text();
     tcpport = ui->port->text().toInt();
 
-    if (tcpaddress == "alex" && tcpport == 0000){
+    if (tcpaddress == "alex" && tcpport == 0){
         initializeConnection();
         return;
     }
 
-    tcpsocket = new QTcpSocket(this);
-    tcpsocket->connectToHost(tcpaddress, tcpport);
+    tcp->connectToHost(tcpaddress, tcpport);
 
-    connect(tcpsocket, SIGNAL(connected()), this ,SLOT(initializeConnection()));
+    connect(tcp, SIGNAL(connected()), this ,SLOT(initializeConnection()));
 
     ui->connection_status->setText("STATUS: CONNECTION FAILED");
     ui->ip_adress->setText("");
@@ -308,7 +427,13 @@ void MainWindow::attemptConnection(){
 
 
 }
+
 void MainWindow::loadConnectionScreen(){
+    if(tcp->state() == QAbstractSocket::ConnectedState){
+        ui->stackedWidget->setCurrentIndex(3);
+        fadeIn(ui->page4);
+    }
+    else{
 
     ui->stackedWidget->setCurrentIndex(2);
 
@@ -317,15 +442,13 @@ void MainWindow::loadConnectionScreen(){
     connect(ui->connect_button,SIGNAL(pressed()),this , SLOT(attemptConnection()));
     connect(ui->port,SIGNAL(returnPressed()), this, SLOT(attemptConnection()));
 
+    }
 }
 
 void MainWindow::fadeOutInitializer(){
 
-    fadeOut(ui->initializer, SLOT(loadConnectionScreen()));
-
+        fadeOut(ui->initializer, SLOT(loadConnectionScreen()));
 }
-
-
 
 void MainWindow::loadInitializer(){
     loader->getGauge()->setVisible(false);
@@ -355,4 +478,6 @@ void MainWindow::moveLoadingGauge(){
 
 }
 
-
+void MainWindow::updateTimeDisplay(){
+    ui->time_value->setText(QTime::currentTime().toString("hh:mm"));
+}

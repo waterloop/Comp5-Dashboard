@@ -8,6 +8,7 @@
 
 class waterLoopGaugeItem : public QcGaugeWidget
 {
+    Q_OBJECT
 public:
     waterLoopGaugeItem();
     waterLoopGaugeItem(QcThemeItem &theme, qreal size, QString type, QString label, QString units,qreal precision, qreal startValue, qreal maxValue, qreal warningValueHigh, qreal warningValueLow, qreal stepSize);
@@ -16,7 +17,16 @@ public:
     qreal getCurrentValue();
     void setCurrentValue(qreal value);
 
+signals:
+
+    void stateChanged();
+    void badState();
+    void safeState();
+
 private:
+
+    virtual ~waterLoopGaugeItem() {}
+
     QcGaugeWidget * mainGauge = nullptr;
     QcNeedleItem * mSpeedNeedle = nullptr;
     QcColorBand * mDynamicColorBand = nullptr;
