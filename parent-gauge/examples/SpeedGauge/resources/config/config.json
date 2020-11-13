@@ -1,0 +1,17 @@
+[
+  {
+    "name" : "Speedometer",
+    "units" : "m/s",
+    "maxRange" : [0,400],
+    "accRange" : [50,350],
+    "id" : 1
+  },
+  {
+    "name" : "High Volt.",
+    "units" : "V",
+    "maxRange" : [0,100],
+    "accRange" : [10,90],
+    "id" : 2
+  }
+  
+]

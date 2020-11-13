@@ -1,0 +1,1 @@
+This will explain how the logs store information

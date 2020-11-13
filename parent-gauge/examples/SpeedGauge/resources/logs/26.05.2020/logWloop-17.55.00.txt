@@ -1,0 +1,7 @@
+BEGINNING TO LOG
+17.55.00.649127.0.0.1 connected to server !
+
+17.55.00.859shalom
+17.55.01.175shalom
+17.55.01.483shalom
+17.55.01.804shalom

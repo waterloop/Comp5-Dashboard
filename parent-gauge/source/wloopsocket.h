@@ -6,40 +6,73 @@
 #include <QThread>
 #include <QTimer>
 
-#define BEAT_INTERVAL 1500
+#define BEAT_INTERVAL 300
+#define MAX_WAIT 500
+
+enum{ //HEARTBEAT STATES
+  heartBeatStarted,
+    noHeartBeat
+};
+
 
 class WLoopSocket : public QTcpSocket {
   Q_OBJECT
 
 public:
 
-  explicit WLoopSocket(QObject *parent = nullptr): QTcpSocket(parent) {}
-     void closeThread(){
-         heartBeat->exit();
-     }
-  virtual bool waitForConnected(int msecs = 30000) override {
-    bool result = QAbstractSocket::waitForConnected(msecs);
+    enum heartBeatState { //HEARTBEAT STATES (i.e. if the heartbeat was ever started)
+        heartBeatStarted,
+        noHeartBeat
+    };
+    Q_ENUM(heartBeatState)
+    explicit WLoopSocket(QObject *parent = nullptr): QTcpSocket(parent) {}
 
-    // SET UP HEART BEAT
-    // CAN SPIN A THREAD THAT CONTINUOUSLY WRITES TO THE SOCKET
+    void closeThread(){
+        if (hbstate == WLoopSocket::noHeartBeat){
+            return;
+        }
+        else if (hbstate== WLoopSocket::heartBeatStarted){
+            heartBeat->exit();
+        }
+    }
 
-    this->heartBeatTimer = new QTimer(nullptr); // NO PARENT
-    this->heartBeatTimer->setInterval(BEAT_INTERVAL); // in millisecs
-    this->heartBeatTimer->setSingleShot(false); // fire repeatedly
+    void startHeartBeat(){
+       // SET UP HEART BEAT
+       // CAN SPIN A THREAD THAT CONTINUOUSLY WRITES TO THE SOCKET
 
-    heartBeat = new QThread(this);
-    heartBeatTimer->moveToThread(heartBeat);
+        if(hbstate == WLoopSocket::heartBeatStarted) return;
 
-    connect(heartBeatTimer, SIGNAL(timeout()), this, SLOT(sendHeartBeat()));
-    connect(heartBeat,SIGNAL(started()),heartBeatTimer, SLOT(start()));
-    connect(heartBeat,SIGNAL(finished()), heartBeatTimer, SLOT(stop()));
+        if(!this->waitForConnected(MAX_WAIT)){
+            qDebug() <<" not connected";
+            emit disconnected();
+            return;
+        }
 
-    heartBeat->start(); // START THE HEART BEAT
+        hbstate = WLoopSocket::heartBeatStarted;
 
+        this->heartBeatTimer = new QTimer(nullptr); // NO PARENT
+        this->heartBeatTimer->setInterval(BEAT_INTERVAL); // in millisecs
+        this->heartBeatTimer->setSingleShot(false); // fire repeatedly
 
-    return result;
-  }
-  ~WLoopSocket() { delete heartBeat;  delete heartBeatTimer; } // DESTRUCTOR NEEDED because no parent?
+        heartBeat = new QThread(this);
+        heartBeatTimer->moveToThread(heartBeat);
+
+        connect(heartBeatTimer, SIGNAL(timeout()), this, SLOT(sendHeartBeat()));
+        connect(heartBeat,SIGNAL(started()),heartBeatTimer, SLOT(start()));
+        connect(heartBeat,SIGNAL(finished()), heartBeatTimer, SLOT(stop()));
+
+        heartBeat->start(); // START THE HEART BEAT
+   }
+
+    heartBeatState heartBeatState(){
+        return hbstate;
+    }
+
+   ~WLoopSocket() {
+        if(hbstate == WLoopSocket::heartBeatStarted){
+            delete heartBeat;  delete heartBeatTimer; }
+    } // DESTRUCTOR NEEDED because no parent?
+
 
 private slots:
   void sendHeartBeat() {
@@ -53,6 +86,7 @@ private slots:
 private:
   QThread *heartBeat;
   QTimer *heartBeatTimer;
+  enum heartBeatState hbstate = WLoopSocket::noHeartBeat;
 
 };
 
