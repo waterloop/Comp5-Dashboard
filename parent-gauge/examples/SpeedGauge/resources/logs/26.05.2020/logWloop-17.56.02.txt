@@ -1,0 +1,7 @@
+BEGINNING TO LOG
+17.56.02.489127.0.0.1 connected to server !
+
+17.56.02.701shalom
+17.56.03.015shalom
+17.56.03.327shalom
+17.56.03.642shalom

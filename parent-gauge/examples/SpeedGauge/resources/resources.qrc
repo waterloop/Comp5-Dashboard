@@ -21,5 +21,8 @@
         <file>images/wloop_full_large.png</file>
         <file>images/wloop_full_med.png</file>
         <file>images/wloop_full_small.png</file>
+        <file>images/yellowpod.png</file>
+        <file>config/config.json</file>
+        <file>logs/readme.txt</file>
     </qresource>
 </RCC>

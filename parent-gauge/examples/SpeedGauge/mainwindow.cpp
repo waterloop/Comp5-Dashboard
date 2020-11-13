@@ -47,6 +47,24 @@ MainWindow::MainWindow(QWidget *parent) :
     QcThemeItem loadTheme = QcThemeItem(":/styles/waterLoopThemeLOAD.txt");
     //----------------------------------------------------------------------------
 
+    //CREATING LOG FILE
+
+    if(! QDir("D:/Coding/Workspaces/WaterLoop/qT/parent-gauge/Comp5-Dashboard/parent-gauge/examples/SpeedGauge/resources/logs/"+ QDateTime::currentDateTime().toString("dd.MM.yyyy") ).exists()){
+        QDir().mkdir("D:/Coding/Workspaces/WaterLoop/qT/parent-gauge/Comp5-Dashboard/parent-gauge/examples/SpeedGauge/resources/logs/"+ QDateTime::currentDateTime().toString("dd.MM.yyyy"));
+    }
+    QString logFileName = "D:/Coding/Workspaces/WaterLoop/qT/parent-gauge/Comp5-Dashboard/parent-gauge/examples/SpeedGauge/resources/logs/" +  QDateTime::currentDateTime().toString("dd.MM.yyyy")+ "/logWloop-";
+    logFileName.append(QDateTime::currentDateTime().toString("hh.mm.ss"));
+    logFileName.append(".txt");
+    logFile.setFileName(logFileName);
+    if(logFile.open(QIODevice::ReadWrite | QIODevice::Text)){
+        logStream.setDevice(&logFile);
+        qDebug() << "log file created";
+        logStream <<"BEGINNING TO LOG\n";
+    }
+    else{
+        qDebug() << "unable to create log file, proceeding without logging information";
+    }
+
     //LOADING IMAGES
 
     QPixmap logo(":/images/wloop_full_med.png");
@@ -55,7 +73,22 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->logo->show();
 
     QPixmap logo_small(":/images/wloop_full_small.png");
+
     //-------------------------------------------------------------------------
+
+    //LOADING SENSORS
+
+    QString json_data;
+    QFile json_file;
+    json_file.setFileName(":/config/config.json");
+    json_file.open(QIODevice::ReadOnly | QIODevice::Text);
+    json_data = json_file.readAll();
+    json_file.close();
+    QJsonDocument startup_config = QJsonDocument::fromJson(json_data.toUtf8());
+    json_data.clear();
+    sensors = getSensorArray(startup_config);
+
+    //--------------------------------------------------------------------------
 
     //SETTING UP LOADER
     loader = new waterLoopGaugeItem(loadTheme, 500, "Current", "LOADING" ,"A", 0, 0, 60, 60, 0, 5);
@@ -70,9 +103,9 @@ MainWindow::MainWindow(QWidget *parent) :
     timerLoad->start(10);
 
      ui->load_page_layout->addWidget(loader->getGauge(),0,0);
-    //-------------------------------------------------------------------
+     //-------------------------------------------------------------------
 
-    //SETTING UP TIME DISPLAY
+     //SETTING UP TIME DISPLAY
      ui->time_value->setText(QTime::currentTime().toString("hh:mm"));
 
      timeThread = new QThread(this);
@@ -82,7 +115,7 @@ MainWindow::MainWindow(QWidget *parent) :
      timeDisplay->setInterval(1000);
      timeDisplay->moveToThread(timeThread);
 
-     //required connections
+     //establishing required connections
      connect(timeDisplay, SIGNAL(timeout()), this, SLOT(updateTimeDisplay()));
      connect(timeThread, SIGNAL(started()), timeDisplay, SLOT(start()));
      connect(timeThread, SIGNAL(finished()),timeDisplay, SLOT(stop()));
@@ -90,7 +123,29 @@ MainWindow::MainWindow(QWidget *parent) :
      //starting thread
      timeThread->start();
 
-    //------------------------------------------------------------------
+     //------------------------------------------------------------------
+
+     //SETTING UP REFRESH RATE
+
+     screenRefresh = new QThread(this);
+
+     //setting up timer
+
+     refreshTimer = new QTimer(nullptr);
+     refreshTimer->setInterval(static_cast<int>(1000.0/fps));
+     refreshTimer->moveToThread(screenRefresh);
+
+     //establishing connections
+
+     connect(refreshTimer, SIGNAL(timeout()), this, SLOT(refreshScreen()));
+     connect(screenRefresh, SIGNAL(started()), refreshTimer, SLOT(start()));
+     connect(screenRefresh, SIGNAL(finished()), refreshTimer, SLOT(stop()));
+
+     //starting thread
+
+     screenRefresh->start();
+
+     //-------------------------------------------------------------------------------
 
     //CREATING COMPONENTS
 
@@ -160,22 +215,66 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->buttonsLV_layout->addWidget(lowC->getGauge(),3,1);
     ui->speed_layout->addWidget(speedoMeter->getGauge(),0,0);
 
+    //SETTING UP VALIDATORS FOR LINE EDITS
+
+    ui->port->setValidator(new QIntValidator(1,65535,this));
+    ui->max_dist_line_edit->setValidator(new QDoubleValidator(0,10000, 2,this));
+    ui->max_time_line_edit->setValidator(new QDoubleValidator(0,10000, 2,this));
+    ui->max_speed_line_edit->setValidator(new QDoubleValidator(0,10000, 2,this));
+
     //SETTING TAB ORDER
 
     setTabOrder(ui->ip_adress,ui->port);
     setTabOrder(ui->port,ui->connect_button);
+    setTabOrder(ui->max_speed_line_edit, ui->max_dist_line_edit);
+    setTabOrder(ui->max_dist_line_edit, ui->max_time_line_edit);
 
     //TRYING INITIAL CONNECTION WITH DETERMINED ADRESS AND PORT
 
     tcp = new WLoopSocket(this);
+
+    //establishing required connections pre initialization
+
+    connect(tcp, SIGNAL(disconnected() ), this, SLOT(checkNetworkConnectivity()));
+    connect(tcp, SIGNAL(connected()), this, SLOT(checkNetworkConnectivity()));
+
+    //trying initalizing the connection using default parameters
     tcp->connectToHost(std_add, std_port);
-    if(tcp->waitForConnected(1000)){
-        qDebug() << "conected!";
+    tcp->startHeartBeat();
+
+    //establishing post initialization connections
+    connect(tcp, SIGNAL(readyRead()), this, SLOT(readTCPData()));
+
+    //SETTING UP SENSOR TABLE
+
+    ui->tableWidget->setRowCount(sensors.size());
+    QTableWidgetItem * item;
+    int sensors_size = sensors.size();
+    for(int i = 0; i < sensors_size; i ++){
+        item = new QTableWidgetItem(sensors[i]->getName());
+        ui->tableWidget->setItem(i,0,item);
+        sensors[i]->setNameItem(item);
+        item = new QTableWidgetItem(QString::number(sensors[i]->getValue()).append(" ").append(sensors[i]->getUnits()));
+        ui->tableWidget->setItem(i,1,item);
+        sensors[i]->setValItem(item);
+        connect(sensors[i], SIGNAL(stateChanged(QTableWidgetItem *, sensorState)), this, SLOT(changeTableItemBackgroundCOL(QTableWidgetItem *, sensorState)));
+        connect(sensors[i], SIGNAL(valueChanged(QTableWidgetItem *, qreal, QString)), this, SLOT(changeTableItemVAL(QTableWidgetItem *, qreal, QString)));
     }
 
+    //SETTING UP START FORM
+
+    ui->send_form_layout->setAlignment(ui->send_command, Qt::AlignHCenter);
+
+    //SETTING UP IMPORTANT BUTTONS
+
+    connect(ui->stop_button, SIGNAL(released()), this, SLOT(processStop()) );
+    connect(ui->start_button, SIGNAL(released()), this, SLOT(processStart()));
 
 
-    //TESTING ONLY AFTER THIS POINT
+    //TESTING ONLY AFTER THIS POINT (ACTUAL GARBAGE LMAOOOOOO)
+
+    //ui->stackedWidget->setCurrentIndex(4);
+
     //ui->horizontalSlider->setVisible(false);
 
 
@@ -274,19 +373,24 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::readTCPData() {
     buffer = tcp->readAll();
 
-    qDebug()<< buffer;
+    //ui->connection_value->setText("NA");
 
-    data = QJsonDocument::fromJson(stream);
+    ping = QDateTime::currentMSecsSinceEpoch() - buffer.toLongLong();
 
+    logStream << QTime::currentTime().toString("hh.mm.ss.zzz");
+    logStream << ": ";
+    logStream << buffer;
+    logStream << endl;
 
 }
 
 void MainWindow::closeWindow(){
     tcp->closeThread();
     timeThread->exit();
+    screenRefresh->exit();
+    logFile.close();
     this->close();
 }
-
 
 void MainWindow::sendCommand(){
     QByteArray command;
@@ -299,6 +403,8 @@ void MainWindow::sendCommand(){
 
 MainWindow::~MainWindow()
 {
+    delete timeThread;
+    delete timeDisplay;
     delete ui;
 }
 
@@ -312,9 +418,10 @@ void MainWindow::readUpdate(QJsonDocument &d){
 
     qDebug() << d.toJson();
 }
-
+/*
 void MainWindow::on_horizontalSlider_valueChanged(int value)
 {
+
     dlim->setCurrentValue(value);
     lowC->setCurrentValue(value);
     lowV->setCurrentValue(value);
@@ -329,8 +436,14 @@ void MainWindow::on_horizontalSlider_valueChanged(int value)
     dist.append(" m");
     ui->distance_travelled_value->setText(dist);
 
+    int sensor_size = sensors.size();
+    for(int i = 0; i < sensor_size; i ++){
+        sensors[i]->changeValueSlider(value);
+    }
+
 
 }
+*/
 
 void MainWindow::updatePodHealthGOOD(){
 
@@ -383,14 +496,50 @@ void MainWindow::loadMainScreen(){
     ui->stackedWidget->setCurrentIndex(3);
 
     fadeIn(ui->page4);
+}
+
+void MainWindow::loadStartScreen(){
+    ui->stackedWidget->setCurrentIndex(4);
+    fadeIn(ui->page5);
+    connect(ui->send_command, SIGNAL(released()), this, SLOT(fadeOutStartScreen()));
 
 }
+
+void MainWindow::fadeOutStartScreen(){
+
+    QString temp = ui->max_dist_line_edit->text();
+    if(temp.toDouble()>0) travelDistance = temp.toDouble();
+    else travelDistance = -1;
+    temp = ui->max_speed_line_edit->text();
+    if(temp.toDouble()>0) maxSpeed = temp.toDouble();
+    else maxSpeed = -1;
+    temp = ui->max_time_line_edit->text();
+    if(temp.toDouble()>0) maxTime = temp.toDouble() ;
+    else maxTime = -1;
+    qDebug() << "TRAVEL" << travelDistance;
+    if(maxTime < 0 && maxSpeed < 0 && travelDistance < 0){
+        runningState = 0;
+        ui->stop_button->setText("DISCONNECT");
+        fadeOut(ui->page5,SLOT(loadMainScreen()));
+    }
+    else if (maxTime < 0 || maxSpeed <0 || travelDistance <0){
+        runningState = 0;
+    }
+    else{
+        runningState = 1;
+        ui->stop_button->setText("STOP");
+        ui->start_button->setEnabled(false);
+        fadeOut(ui->page5,SLOT(loadMainScreen()));
+    }
+
+}
+
 void MainWindow::initializeConnection(){
     ui->connection_status->setText("STATUS: CONNECTED\n INITIALIZING CONNECTION");
 
     //SEND FIRST ACKNOWLEDGMENT PACKAGE AND STUFF
 
-    connect(tcp,SIGNAL(readyRead()),this, SLOT(readTCPData()));
+    tcp->startHeartBeat();
 
 
     //MOVE ONTO THE MAIN STUFF
@@ -423,17 +572,10 @@ void MainWindow::attemptConnection(){
     ui->port->setText("");
     return;
 
-
-
-
 }
 
 void MainWindow::loadConnectionScreen(){
-    if(tcp->state() == QAbstractSocket::ConnectedState){
-        ui->stackedWidget->setCurrentIndex(3);
-        fadeIn(ui->page4);
-    }
-    else{
+
 
     ui->stackedWidget->setCurrentIndex(2);
 
@@ -442,12 +584,14 @@ void MainWindow::loadConnectionScreen(){
     connect(ui->connect_button,SIGNAL(pressed()),this , SLOT(attemptConnection()));
     connect(ui->port,SIGNAL(returnPressed()), this, SLOT(attemptConnection()));
 
-    }
+
 }
 
 void MainWindow::fadeOutInitializer(){
-
-        fadeOut(ui->initializer, SLOT(loadConnectionScreen()));
+    if(tcp->state() == QAbstractSocket::ConnectedState){
+        fadeOut(ui->initializer, SLOT(loadMainScreen()));
+    }
+    else fadeOut(ui->initializer, SLOT(loadConnectionScreen()));
 }
 
 void MainWindow::loadInitializer(){
@@ -480,4 +624,109 @@ void MainWindow::moveLoadingGauge(){
 
 void MainWindow::updateTimeDisplay(){
     ui->time_value->setText(QTime::currentTime().toString("hh:mm"));
+}
+
+void MainWindow::checkNetworkConnectivity(){
+    if(tcp->state() == QAbstractSocket::ConnectedState){
+        ui->connection_indicator->setStyleSheet("QLabel#connection_indicator { background-color: #14ff65; color: #2b2b2b; border: 3px solid #14ff65; border-radius : 20px; }");
+        ui->connection_indicator->setText("CONNECTED");
+        ui->start_button->setText("START");
+        ui->stop_button->setEnabled(true);
+        if(!runningState){
+            ui->stop_button->setText("DISCONNECT");
+        }
+    }
+    else{
+        ui->connection_indicator->setStyleSheet("QLabel#connection_indicator { background-color: #ff9494; color: #2b2b2b; border: 3px solid #ff9494; border-radius : 20px; }");
+        ui->connection_indicator->setText("ERROR");
+        ui->start_button->setText("RECONNECT");
+        ui->stop_button->setEnabled(false);
+        ui->connection_value->setText("NA");
+
+    }
+}
+
+void MainWindow::processStart(){
+    if(ui->start_button->text() == "RECONNECT"){
+        ui->connection_status->setText("STATUS: WAITING FOR INPUT");
+        runningState = 0;
+        loadConnectionScreen();
+    }
+    if(ui->start_button->text() == "START"){
+        runningState = 0;
+        ui->max_dist_line_edit->setText("");
+        ui->max_time_line_edit->setText("");
+        ui->max_speed_line_edit->setText("");
+        fadeOut(ui->page4, SLOT(loadStartScreen()));
+    }
+
+    else{
+        ui->stop_button->setText("STOP");
+        //runningState = 1;
+    }
+}
+
+void MainWindow::processStop(){
+    if(ui->stop_button->text() == "DISCONNECT"){
+        runningState = 0;
+        ui->connection_status->setText("STATUS: WAITING FOR INPUT");
+        tcp->disconnectFromHost();
+        loadConnectionScreen();
+    }
+    else{
+        runningState = 0;
+        ui->start_button->setEnabled(true);
+    }
+
+}
+
+void MainWindow::changeTableItemBackgroundCOL(QTableWidgetItem * item, sensorState state){
+    QColor bcol;
+    QColor tcol = QColor("2b2b2b");
+    if(state == safe){
+        bcol = QColor("#14ff65");
+        item->setBackground(bcol);
+        item->setTextColor(tcol);
+    }
+    else{
+        bcol = QColor("#ff9494");
+        item->setBackgroundColor(bcol);
+        item->setTextColor(tcol);
+    }
+
+}
+
+void MainWindow::changeTableItemVAL(QTableWidgetItem * item, qreal val, QString units){
+    item->setText(QString::number(val).append(" ").append(units));
+}
+
+void MainWindow::refreshScreen(){
+    qreal value = ui->horizontalSlider->value();
+    dlim->setCurrentValue(value);
+    lowC->setCurrentValue(value);
+    lowV->setCurrentValue(value);
+    highC->setCurrentValue(value);
+    highV->setCurrentValue(value);
+    speedoMeter->setCurrentValue(value);
+
+    ui->distance_travelled_bar->setValue(value);
+    ui->connection_value->setText(QString::number(ping) + "ms");
+
+    QString dist;
+    dist = "Distance Travelled: ";
+    if(travelDistance < 0){
+        dist.append(" NA");
+    }
+    else{
+        dist.append(QString::number(floor((static_cast<double>(value)/99)*travelDistance)));
+        dist.append(" m");
+    }
+    ui->distance_travelled_value->setText(dist);
+
+    int sensor_size = sensors.size();
+    for(int i = 0; i < sensor_size; i ++){
+        sensors[i]->changeValueSlider(value);
+    }
+
+
 }
